@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zine (zinedine kubkrabee) — Desk Portfolio</title>
+<meta name="description" content="พอร์ตโฟลิโอของ Zine (zinedine kubkrabee) — Content Creator สายภาษี การเงิน การตลาด ระบบร้านอาหาร SOP/POS และ Vibe Coding">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Ms+Madi&family=Mali:wght@500&display=swap">
+<style>
+/* Layout: a messy desk hero you can drag around (3 modes) and draw on (Paint toolbox) → mono list sections in one narrow left column.
+   One deliberate look (paper on a desk), so a single theme with every colour set explicitly. */
+:root{
+  --paper:#FFFAF5;      /* page */
+  --card:#FCF7F2;       /* list cards */
+  --ink:#3E3E42;        /* headings */
+  --ink-2:#69645E;      /* body */
+  --ink-3:#878686;      /* meta */
+  --chip:#E7E6DE;       /* active menu button */
+  --line:#EDE6DD;
+  --pop:#F76240;        /* the other person's cursor */
+  --you:#242424;        /* your cursor */
+  --script:"Ms Madi","Brush Script MT",cursive;
+  --felt:"Mali","Comic Sans MS",cursive;
+  --mono:"IBM Plex Mono","IBM Plex Sans Thai",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+body{background:var(--paper);color:var(--ink-2);font-family:var(--mono);font-size:14px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+*{box-sizing:border-box}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--pop);outline-offset:3px;border-radius:6px}
+
+/* ---------- desk hero ---------- */
+.desk{position:relative;container-type:inline-size;height:min(92cqw,760px);min-height:560px;overflow:hidden;user-select:none}
+@supports not (height:1cqw){.desk{height:680px}}
+.obj{position:absolute;left:0;top:0;cursor:grab;touch-action:none;
+  transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .4s;will-change:transform;filter:drop-shadow(0 6px 10px rgba(60,40,20,.14))}
+.obj.drag{transition:none;cursor:grabbing;filter:drop-shadow(0 16px 22px rgba(60,40,20,.22))}
+.obj.gone{opacity:0;pointer-events:none}
+.obj svg{display:block;width:100%;height:auto}
+
+/* drawing layer: sits over every desk object; only catches the pointer while a draw tool is picked */
+.paint{position:absolute;inset:0;z-index:1000;pointer-events:none;touch-action:none}
+.desk.drawing .paint{pointer-events:auto;cursor:crosshair}
+.desk.drawing .paint.t-text{cursor:text}
+.typing{position:absolute;z-index:1004;border:1px dashed var(--ink-3);background:rgba(255,255,255,.7);font:500 22px var(--felt);padding:0 4px;outline:none;min-width:120px}
+
+.title{position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none;z-index:1001;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
+.title h1{font:400 clamp(56px,10cqw,104px)/1.1 var(--script);color:var(--ink);margin:0;font-weight:400}
+.title .role{margin:.3em 0 0;font-size:15px;color:var(--ink)}
+.title .pos{margin:.15em 0 .9em;font-size:11px;font-style:italic;color:var(--ink-3)}
+.title .tag{max-width:30ch;margin:0 auto;font-size:15px;line-height:1.5;color:var(--ink)}
+
+.menu{position:absolute;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;gap:10px;z-index:1002}
+.menu button{width:48px;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--paper);display:grid;place-items:center;cursor:pointer;transition:background .2s,transform .2s}
+.menu button:hover{transform:translateY(-2px)}
+.menu button[aria-pressed="true"]{background:var(--chip);border-color:var(--chip)}
+.menu svg{width:26px;height:26px;stroke:var(--ink);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.toast{position:absolute;left:50%;bottom:calc(-30px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);white-space:nowrap;
+  background:var(--you);color:#fff;font-size:11px;padding:4px 10px;border-radius:8px;opacity:0;transition:opacity .25s,bottom .25s;pointer-events:none}
+.toast.on{opacity:1;bottom:calc(-34px + env(safe-area-inset-bottom,0px))}
+
+/* small HTML objects on the desk */
+.player{width:100%;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px;font-size:10px;text-align:center}
+.vinyl{width:78%;aspect-ratio:1;margin:0 auto 10px;border-radius:50%;background:radial-gradient(circle,#F3EBD9 0 17%,#D9443A 17.5% 31%,#111 31.5% 33%,#1b1b1b 33% 100%);
+  box-shadow:inset 0 0 0 6px #111, inset 0 0 0 7px #2a2a2a, inset 0 0 0 16px #111, inset 0 0 0 17px #2a2a2a;animation:spin 3.2s linear infinite;animation-play-state:paused}
+.player.on .vinyl{animation-play-state:running}
+@keyframes spin{to{transform:rotate(360deg)}}
+.player .artist{color:var(--ink-3)}
+.player b{display:block;font-weight:500;color:var(--ink);font-size:12px}
+.player .bar{height:10px;margin:4px 0 0;position:relative;cursor:pointer}
+.player .bar::before{content:"";position:absolute;left:0;right:0;top:4px;height:2px;background:var(--line)}
+.player .bar i{position:absolute;left:0;top:4px;height:2px;width:0;background:var(--ink)}
+.player .time{display:block;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.player .ctl{display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-top:2px}
+.player button,.player label{font:inherit;font-size:11px;border:0;background:none;color:var(--ink);cursor:pointer;padding:2px 6px;border-radius:6px}
+.player button:hover,.player label:hover{background:var(--chip)}
+.player .note{display:block;margin-top:4px;color:var(--pop);line-height:1.35}
+.player .note:empty{display:none}
+.player a{display:block;margin-top:4px;color:var(--ink-3);text-decoration:none}
+.player a:hover{color:var(--ink)}
+.airdrop{width:100%;background:#fff;border-radius:14px;overflow:hidden;font:12px/1.3 system-ui,sans-serif;text-align:center;color:#111}
+.airdrop p{margin:10px 10px 8px}
+.airdrop .ph{height:96px;background:linear-gradient(135deg,#FFB23F,#F76240 55%,#E3343D)}
+.airdrop .ph span{display:grid;place-items:center;height:100%;font:400 34px var(--script);color:#fff}
+.airdrop .btns{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #e6e6e6}
+.airdrop .btns button,.airdrop .btns a{font:inherit;border:0;background:none;padding:9px;color:#1a73e8;cursor:pointer;text-decoration:none;display:block}
+.airdrop .btns button:hover,.airdrop .btns a:hover{background:#f5f7fa}
+.airdrop .btns a{border-left:1px solid #e6e6e6;font-weight:600}
+
+/* MS-Paint style toolbox that really draws */
+.paintbox{background:#C0C0C0;border:2px outset #e8e8e8;padding:3px;display:grid;gap:4px}
+.grip{background:linear-gradient(90deg,#0A246A,#3A6EA5);color:#fff;font:700 10px/1 system-ui,sans-serif;padding:4px 5px;cursor:grab}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.tools button{aspect-ratio:1;background:#D4D0C8;border:2px outset #fff;display:grid;place-items:center;font:700 14px/1 Georgia,serif;color:#111;cursor:pointer;padding:0}
+.tools button[aria-pressed="true"]{border-style:inset;background:#fff}
+.tools svg{width:62%;height:62%;stroke:#111;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;border:2px inset #fff;padding:2px;background:#fff}
+.swatches button{aspect-ratio:1;border:1px solid #808080;cursor:pointer;padding:0}
+.swatches button[aria-pressed="true"]{outline:2px solid #111;outline-offset:-1px}
+
+.folder-label{display:block;text-align:center;font:11px system-ui,sans-serif;color:var(--ink);margin-top:2px}
+
+/* fake multiplayer cursor that wanders the page */
+.peer{position:absolute;z-index:1003;pointer-events:none;transition:transform 2.4s cubic-bezier(.45,0,.2,1)}
+.peer svg{width:18px;height:18px;display:block}
+.peer span{display:inline-block;margin:-2px 0 0 12px;background:var(--pop);color:#fff;font:600 12px system-ui,sans-serif;padding:7px 14px;border-radius:24px}
+
+/* ---------- sections ---------- */
+main{max-width:1040px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:40px 120px;display:grid;gap:96px}
+h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
+.cooking p{margin:0 0 12px;line-height:1.7;max-width:62ch}
+.inline-app{display:inline-flex;align-items:center;gap:8px;vertical-align:middle}
+.inline-app i{width:34px;height:34px;border-radius:9px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;transform:rotate(-6deg);box-shadow:0 2px 6px rgba(0,0,0,.08);font-style:normal}
+.inline-app b{font:500 21px var(--felt);color:#242424;font-weight:500}
+
+.recent{position:relative}
+.rows{display:grid;gap:12px;max-width:500px}
+.row{display:flex;gap:14px;align-items:center;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;text-decoration:none;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),background .2s;cursor:none}
+.row:hover,.row:focus-visible{transform:translateX(10px);background:#fff}
+.icon{flex:none;width:64px;height:64px;border-radius:14px;display:grid;place-items:center;overflow:hidden}
+.row h3{margin:0 0 4px;font:600 18px/1.2 var(--mono);color:var(--ink-2)}
+.row p{margin:0;font-size:15px;line-height:1.3;min-width:0}
+.row div{min-width:0}
+.ex{font-size:10px;color:var(--ink-3);border:1px dashed var(--ink-3);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:middle;font-weight:400}
+
+/* hover preview: screens fan out on the right */
+.fan{position:absolute;left:540px;top:40px;width:360px;height:320px;pointer-events:none}
+.shot{position:absolute;inset:0 auto auto 0;width:170px;height:300px;border-radius:22px;border:6px solid #1c1c1e;background:#fff;
+  opacity:0;transform:translate(40px,30px) rotate(0) scale(.9);transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .3s;box-shadow:0 18px 40px rgba(40,30,20,.18);overflow:hidden}
+.fan.on .shot{opacity:1}
+.fan.on .shot:nth-child(1){transform:translate(0,10px) rotate(-8deg)}
+.fan.on .shot:nth-child(2){transform:translate(110px,0) rotate(3deg)}
+.fan.on .shot:nth-child(3){transform:translate(210px,24px) rotate(11deg)}
+.shot .scr{height:100%;padding:16px 12px;display:flex;flex-direction:column;gap:8px;font-size:10px;color:#fff}
+.shot .scr b{font:700 15px/1.15 system-ui,sans-serif}
+.shot .blk{height:34px;border-radius:8px;background:rgba(255,255,255,.28)}
+.shot .blk.s{height:14px;width:60%}
+@media (max-width:900px){.fan{display:none}.row{cursor:pointer}}
+
+.you{position:fixed;left:0;top:0;z-index:2000;pointer-events:none;opacity:0;transition:opacity .2s}
+.you.on{opacity:1}
+.you span{display:inline-block;margin:-4px 0 0 14px;background:var(--you);color:#fff;font:600 13px system-ui,sans-serif;padding:10px 26px;border-radius:100px;box-shadow:0 2px 4px rgba(0,0,0,.25)}
+.you svg{width:18px;height:18px;display:block}
+
+.others{display:grid;gap:28px;max-width:520px}
+.work{display:grid;grid-template-columns:104px 1fr;gap:26px;padding:28px 28px 28px 30px;background:var(--card);border:1px solid var(--line);border-radius:24px;align-items:center}
+.thumb{width:104px;aspect-ratio:104/120;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.12);overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.work:hover .thumb{transform:rotate(-4deg) scale(1.06)}
+.work h3{margin:0;font:600 18px var(--mono);letter-spacing:-.02em;color:var(--ink-2)}
+.work .meta{font-size:11px;color:var(--ink-3);margin:6px 0 0}
+.work hr{border:0;border-top:1px solid #d9d3cb;width:56px;margin:14px 0}
+.work p{margin:0 0 12px;line-height:1.35;color:var(--ink-3);font-size:14px}
+.work a{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;color:var(--ink-3)}
+.work a:hover{background:var(--chip);color:var(--ink)}
+.work a svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+@media (max-width:480px){.work{grid-template-columns:1fr;padding:22px}.thumb{width:88px}}
+
+.timeline{display:grid;gap:14px;max-width:560px}
+.exp-card{padding:20px 22px;background:var(--card);border:1px solid var(--line);border-radius:18px;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .2s}
+.exp-card:hover{transform:translateX(6px);background:#fff}
+.exp-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.exp-card h3{margin:0;font:600 16px/1.3 var(--mono);color:var(--ink)}
+.exp-period{font-size:12px;color:var(--ink-3);white-space:nowrap}
+.exp-sub{margin:0 0 8px;font-size:13px;color:var(--pop);font-weight:500}
+.exp-card p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.badge-honor{display:inline-block;background:#FCE7C8;color:#7a4b12;border:1px solid #e9cda0;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:middle}
+.skill-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;max-width:560px}
+.skill-tags span{font-size:12px;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:5px 11px;border-radius:99px}
+
+/* work with me (for brands) */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;max-width:620px;margin:0 0 26px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.stat b{display:block;font:600 26px/1.1 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.stat span{display:block;margin-top:6px;font-size:12px;color:var(--ink-3);line-height:1.35}
+.offer{display:grid;gap:10px;max-width:620px;margin:0 0 22px;padding:0;list-style:none}
+.offer li{display:grid;grid-template-columns:22px 1fr;gap:8px;line-height:1.5;font-size:15px}
+.offer li::before{content:"✎";color:var(--pop)}
+.offer b{color:var(--ink);font-weight:600}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;max-width:620px}
+.cta code{font:500 15px var(--mono);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;user-select:all;word-break:break-all}
+.cta button{font:500 13px var(--mono);border:0;border-radius:10px;padding:11px 16px;background:var(--you);color:#fff;cursor:pointer}
+.cta button:hover{background:var(--pop)}
+.small{font-size:12px;color:var(--ink-3);margin:12px 0 0}
+
+.about p{max-width:64ch;line-height:1.6;margin:0 0 14px;font-size:15px}
+.about footer{margin-top:28px;font-size:12px;display:flex;flex-wrap:wrap;gap:6px 10px}
+.about footer a{text-decoration:none;border-bottom:1px solid transparent}
+.about footer a:hover{border-color:currentColor}
+
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO: the desk ============ -->
+<section class="desk" id="desk" aria-label="โต๊ะทำงาน ลากของบนโต๊ะได้ และวาดรูปด้วยแผงเครื่องมือ">
+
+  <!-- notebook (open, grid paper) -->
+  <div class="obj" data-id="notebook" style="width:58cqw;z-index:1">
+    <svg viewBox="0 0 600 420" aria-hidden="true"><defs><pattern id="g" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="#e6e3de" stroke-width="1"/></pattern></defs>
+      <path d="M8 18 300 6 300 412 14 404Z" fill="#fbfaf7"/><path d="M8 18 300 6 300 412 14 404Z" fill="url(#g)"/>
+      <path d="M300 6 592 20 586 406 300 412Z" fill="#f7f6f2"/><path d="M300 6 592 20 586 406 300 412Z" fill="url(#g)"/>
+      <path d="M300 6v406" stroke="#d8d4cc" stroke-width="2"/></svg>
+  </div>
+
+  <!-- coffee stain ring -->
+  <div class="obj" data-id="stain" style="width:14cqw;z-index:2;filter:none">
+    <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="44" fill="none" stroke="#9a6a3c" stroke-opacity=".35" stroke-width="7" stroke-dasharray="230 18 30 9"/><circle cx="104" cy="96" r="4" fill="#9a6a3c" fill-opacity=".35"/><circle cx="112" cy="84" r="2.5" fill="#9a6a3c" fill-opacity=".3"/></svg>
+  </div>
+
+  <!-- coffee cup (top view) -->
+  <div class="obj" data-id="cup" style="width:11cqw;z-index:6">
+    <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="#fff" stroke="#e8e2da" stroke-width="2"/><circle cx="60" cy="60" r="40" fill="#5b3a22"/><circle cx="60" cy="60" r="40" fill="url(#cr)"/><defs><radialGradient id="cr"><stop offset=".55" stop-color="#7a5134"/><stop offset="1" stop-color="#3e2615"/></radialGradient></defs><path d="M48 52c6-8 18-8 24 0s-6 18-12 22c-6-4-18-14-12-22Z" fill="#e9d3b4" opacity=".85"/></svg>
+  </div>
+
+  <!-- receipt (subject detail: tax deduction) -->
+  <div class="obj" data-id="receipt" style="width:12cqw;z-index:4">
+    <svg viewBox="0 0 140 230" aria-hidden="true"><path d="M0 0h140v214l-10 8-10-8-10 8-10-8-10 8-10-8-10 8-10-8-10 8-10-8-10 8-10-8-10 8-10-8Z" fill="#fff"/>
+      <g font-family="IBM Plex Mono,monospace" font-size="9" fill="#555"><text x="70" y="22" text-anchor="middle" font-weight="600">ใบเสร็จรับเงิน</text><text x="70" y="34" text-anchor="middle" font-size="7">ใช้ลดหย่อนภาษีได้</text>
+      <text x="10" y="60">กาแฟ</text><text x="130" y="60" text-anchor="end">65</text><text x="10" y="76">หนังสือ</text><text x="130" y="76" text-anchor="end">390</text><text x="10" y="92">ประกันสุขภาพ</text><text x="130" y="92" text-anchor="end">8,400</text>
+      <path d="M10 104h120" stroke="#bbb" stroke-dasharray="3 3"/><text x="10" y="120" font-weight="600">รวม</text><text x="130" y="120" text-anchor="end" font-weight="600">8,855</text>
+      <text x="70" y="150" text-anchor="middle" font-size="7">เก็บไว้ ยื่นภาษีปีหน้า</text></g>
+      <g fill="#333"><rect x="24" y="166" width="2" height="26"/><rect x="29" y="166" width="4" height="26"/><rect x="36" y="166" width="1" height="26"/><rect x="40" y="166" width="3" height="26"/><rect x="46" y="166" width="2" height="26"/><rect x="52" y="166" width="5" height="26"/><rect x="60" y="166" width="1" height="26"/><rect x="64" y="166" width="3" height="26"/><rect x="70" y="166" width="2" height="26"/><rect x="76" y="166" width="4" height="26"/><rect x="83" y="166" width="1" height="26"/><rect x="87" y="166" width="3" height="26"/><rect x="93" y="166" width="5" height="26"/><rect x="101" y="166" width="2" height="26"/><rect x="106" y="166" width="3" height="26"/><rect x="112" y="166" width="2" height="26"/></g></svg>
+  </div>
+
+  <!-- torn clipping -->
+  <div class="obj" data-id="clip" style="width:15cqw;z-index:5">
+    <svg viewBox="0 0 180 110" aria-hidden="true"><path d="M4 8 40 2l30 6 36-5 34 7 36-4-6 30 4 26-6 40-34-4-30 6-38-5-30 4-32-3 4-30-6-34Z" fill="#efe6d2"/>
+      <g font-family="Georgia,serif" font-size="11" fill="#5a5145"><text x="14" y="28">เงินไม่ได้หายไปไหน</text><text x="14" y="80">แค่เราไม่เคยจด</text></g>
+      <rect x="12" y="40" width="112" height="22" fill="#F7D74A"/><text x="16" y="57" font-family="Georgia,serif" font-weight="700" font-size="17" fill="#222">ภาษีไม่ยาก</text></svg>
+  </div>
+
+  <!-- pen -->
+  <div class="obj" data-id="pen" style="width:2.6cqw;z-index:9">
+    <svg viewBox="0 0 24 260" aria-hidden="true"><rect x="6" y="0" width="12" height="18" rx="3" fill="#2c2c2c"/><rect x="4" y="16" width="16" height="200" rx="7" fill="#d9d9d6"/><rect x="11" y="18" width="3" height="70" rx="1.5" fill="#bdbdb8"/><path d="M4 214h16l-6 38h-4Z" fill="#c7c7c2"/><path d="M11 252h2l-1 8Z" fill="#222"/></svg>
+  </div>
+
+  <!-- film canister -->
+  <div class="obj" data-id="film" style="width:11cqw;z-index:7">
+    <svg viewBox="0 0 150 120" aria-hidden="true"><path d="M78 30h66v58H78Z" fill="#6b4a2c"/><g fill="#fff8"><rect x="84" y="34" width="6" height="6"/><rect x="98" y="34" width="6" height="6"/><rect x="112" y="34" width="6" height="6"/><rect x="126" y="34" width="6" height="6"/><rect x="84" y="78" width="6" height="6"/><rect x="98" y="78" width="6" height="6"/><rect x="112" y="78" width="6" height="6"/><rect x="126" y="78" width="6" height="6"/></g>
+      <rect x="6" y="6" width="74" height="108" rx="8" fill="#222"/><rect x="10" y="20" width="66" height="80" fill="#F2B705"/><rect x="10" y="62" width="66" height="22" fill="#D6201F"/><text x="43" y="54" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="15" fill="#222">ISO</text><text x="43" y="78" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="11" fill="#fff">400</text></svg>
+  </div>
+
+  <!-- calculator -->
+  <div class="obj" data-id="calc" style="width:10cqw;z-index:6">
+    <svg viewBox="0 0 120 170" aria-hidden="true"><rect width="120" height="170" rx="14" fill="#E9E4DA"/><rect x="12" y="12" width="96" height="34" rx="5" fill="#B8C2A6"/><text x="100" y="37" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="17" fill="#2f3527">12,500</text>
+      <g fill="#fff"><rect x="12" y="58" width="20" height="18" rx="4"/><rect x="38" y="58" width="20" height="18" rx="4"/><rect x="64" y="58" width="20" height="18" rx="4"/><rect x="12" y="84" width="20" height="18" rx="4"/><rect x="38" y="84" width="20" height="18" rx="4"/><rect x="64" y="84" width="20" height="18" rx="4"/><rect x="12" y="110" width="20" height="18" rx="4"/><rect x="38" y="110" width="20" height="18" rx="4"/><rect x="64" y="110" width="20" height="18" rx="4"/><rect x="12" y="136" width="46" height="18" rx="4"/><rect x="64" y="136" width="20" height="18" rx="4"/></g>
+      <rect x="90" y="58" width="18" height="44" rx="4" fill="#F76240"/><rect x="90" y="110" width="18" height="44" rx="4" fill="#3E3E42"/></svg>
+  </div>
+
+  <!-- sticker badge -->
+  <div class="obj" data-id="sticker" style="width:9cqw;z-index:8">
+    <svg viewBox="0 0 110 110" aria-hidden="true"><circle cx="55" cy="55" r="52" fill="#fff"/><circle cx="55" cy="55" r="45" fill="#2F6FE4"/><path id="arc" d="M22 55a33 33 0 0 1 66 0" fill="none"/><text font-family="IBM Plex Mono,monospace" font-weight="600" font-size="9.5" fill="#fff" letter-spacing="1"><textPath href="#arc" startOffset="50%" text-anchor="middle">SA THA PA NUK</textPath></text><text x="55" y="75" text-anchor="middle" font-size="26" fill="#fff" font-family="Arial,sans-serif">฿</text></svg>
+  </div>
+
+  <!-- music player: Oh Yeah? by Steve Lacy. The song is not bundled (copyright); the visitor picks their own copy or opens Spotify. -->
+  <div class="obj" data-id="player" style="width:max(19cqw,150px);z-index:10">
+    <div class="player" id="player">
+      <div class="vinyl"></div>
+      <span class="artist">Steve Lacy</span><b>Oh Yeah?</b>
+      <div class="bar" id="bar" role="slider" aria-label="ตำแหน่งเพลง" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><i id="prog"></i></div>
+      <span class="time" id="time">0:00 / –:––</span>
+      <div class="ctl">
+        <button type="button" id="play" aria-pressed="false">▶ เล่น</button>
+        <label for="song">เลือกไฟล์เพลง</label><input type="file" id="song" accept="audio/*" hidden>
+      </div>
+      <span class="note" id="note" role="status"></span>
+      <a href="https://open.spotify.com/search/Oh%20Yeah%3F%20Steve%20Lacy" target="_blank" rel="noopener">ฟังบน Spotify ↗</a>
+      <audio id="audio" preload="metadata"></audio>
+    </div>
+  </div>
+
+  <!-- folder -->
+  <div class="obj" data-id="folder" style="width:13cqw;z-index:9">
+    <svg viewBox="0 0 140 108" aria-hidden="true"><path d="M6 14a8 8 0 0 1 8-8h38l10 10h64a8 8 0 0 1 8 8v8H6Z" fill="#3A9BEA"/><rect x="6" y="26" width="128" height="76" rx="8" fill="#5BB4F5"/><rect x="6" y="26" width="128" height="10" fill="#7CC4F8" opacity=".6"/></svg>
+    <span class="folder-label">final_final_จริงๆ</span>
+  </div>
+
+  <!-- airdrop-ish card -->
+  <div class="obj" data-id="airdrop" style="width:16cqw;z-index:11">
+    <div class="airdrop"><p><b>AirDrop</b><br>Zine อยากแชร์คลิปให้คุณ</p><div class="ph"><span>clip</span></div><div class="btns"><button type="button" id="airdrop-decline">ไม่รับ</button><a href="https://www.tiktok.com/@zinedinekkb" target="_blank" rel="noopener">รับ</a></div></div>
+  </div>
+
+  <canvas class="paint" id="paint" aria-label="พื้นที่วาดรูป"></canvas>
+
+  <!-- paint toolbox (stays above the drawing layer) -->
+  <div class="obj" data-id="tools" style="width:max(7.5cqw,76px);z-index:1001;filter:drop-shadow(0 4px 6px rgba(0,0,0,.18))">
+    <div class="paintbox">
+      <div class="grip" title="ลากเพื่อย้าย">Paint</div>
+      <div class="tools" role="toolbar" aria-label="เครื่องมือวาด">
+        <button type="button" data-tool="move" aria-pressed="true" title="ย้ายของบนโต๊ะ"><svg viewBox="0 0 20 20"><path d="M4 2l11 6-5 1-2 5Z"/></svg></button>
+        <button type="button" data-tool="pencil" aria-pressed="false" title="ดินสอ"><svg viewBox="0 0 20 20"><path d="M4 16 14 6l2 2L6 18H4Z"/></svg></button>
+        <button type="button" data-tool="brush" aria-pressed="false" title="พู่กัน"><svg viewBox="0 0 20 20"><path d="M15 2 9 10"/><path d="M9 10c-3 0-4 2-4 4s-1 3-3 3c4 1 8 0 8-4Z" fill="#111"/></svg></button>
+        <button type="button" data-tool="spray" aria-pressed="false" title="สเปรย์"><svg viewBox="0 0 20 20"><rect x="7" y="8" width="7" height="10" rx="1"/><path d="M9 8V5h3v3"/><path d="M4 3h.1M2 6h.1M5 6h.1M3 9h.1"/></svg></button>
+        <button type="button" data-tool="eraser" aria-pressed="false" title="ยางลบ"><svg viewBox="0 0 20 20"><path d="M3 13 11 5l6 6-5 5H7Z"/><path d="M7 9l6 6"/></svg></button>
+        <button type="button" data-tool="text" aria-pressed="false" title="ตัวหนังสือ">A</button>
+        <button type="button" data-tool="line" aria-pressed="false" title="เส้นตรง"><svg viewBox="0 0 20 20"><path d="M3 17 17 3"/></svg></button>
+        <button type="button" data-tool="rect" aria-pressed="false" title="สี่เหลี่ยม"><svg viewBox="0 0 20 20"><rect x="3" y="5" width="14" height="10"/></svg></button>
+        <button type="button" data-tool="ellipse" aria-pressed="false" title="วงรี"><svg viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="7" ry="5"/></svg></button>
+        <button type="button" id="clear" title="ล้างรูปทั้งหมด"><svg viewBox="0 0 20 20"><path d="M4 6h12M8 6V3h4v3M6 6l1 11h6l1-11"/></svg></button>
+      </div>
+      <div class="swatches" role="toolbar" aria-label="สี">
+        <button type="button" data-color="#242424" style="background:#242424" aria-pressed="true" aria-label="ดำ"></button>
+        <button type="button" data-color="#FFFFFF" style="background:#FFFFFF" aria-pressed="false" aria-label="ขาว"></button>
+        <button type="button" data-color="#F76240" style="background:#F76240" aria-pressed="false" aria-label="ส้ม"></button>
+        <button type="button" data-color="#F7D74A" style="background:#F7D74A" aria-pressed="false" aria-label="เหลือง"></button>
+        <button type="button" data-color="#2F6FE4" style="background:#2F6FE4" aria-pressed="false" aria-label="น้ำเงิน"></button>
+        <button type="button" data-color="#3BB273" style="background:#3BB273" aria-pressed="false" aria-label="เขียว"></button>
+        <button type="button" data-color="#E85AA8" style="background:#E85AA8" aria-pressed="false" aria-label="ชมพู"></button>
+        <button type="button" data-color="#8B5A2B" style="background:#8B5A2B" aria-pressed="false" aria-label="น้ำตาล"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="title">
+    <h1>Zine</h1>
+    <p class="role">Content Creator</p>
+    <p class="pos">verb &amp; noun</p>
+    <p class="tag">ทำเรื่องภาษี การเงิน และโค้ด ให้คนเพิ่งเริ่มทำงานฟังแล้วไม่ง่วง</p>
+  </div>
+
+  <div class="menu" role="toolbar" aria-label="จัดโต๊ะ">
+    <button type="button" data-mode="chaos" aria-pressed="true" aria-label="โต๊ะรก"><svg viewBox="0 0 32 32"><path d="M9 9h14l-2 18H11Z"/><path d="M8 6h16v3H8Z"/><path d="M12 16h8M12 20h8"/></svg></button>
+    <button type="button" data-mode="clean" aria-pressed="false" aria-label="เก็บโต๊ะ"><svg viewBox="0 0 32 32"><path d="M16 3v13"/><path d="M9 16h14l2 6H7Z"/><path d="M7 22l-1 7M12 22l-.5 7M16 22v7M20 22l.5 7M25 22l1 7"/></svg></button>
+    <button type="button" data-mode="notebook" aria-pressed="false" aria-label="เปิดสมุด"><svg viewBox="0 0 32 32"><path d="M21 4l7 7-15 15-8 2 2-8Z"/><path d="M18 7l7 7"/></svg></button>
+    <span class="toast" id="toast" role="status"></span>
+  </div>
+
+  <div class="peer" id="peer" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M1 1l15 6-7 2-2 7Z" fill="#F76240"/></svg><span>Sa tha pa nuk</span></div>
+</section>
+
+<!-- ============ CONTENT ============ -->
+<main>
+  <section class="cooking">
+    <h2>Currently cooking ☺︎</h2>
+    <p>กำลังทำของใหม่ชื่อ <span class="inline-app"><i>✎</i><b>Content Studio</b></span> ,</p>
+    <p>แอปในเครื่องที่ช่วยคิดไอเดีย เขียนบท ตรวจข้อมูลภาษี และตัดคลิป TikTok ให้ทำคลิปได้โดยไม่หมดไฟ</p>
+    <p>เดี๋ยวมาเล่าเบื้องหลังในช่องครับ ✎</p>
+  </section>
+
+  <section class="recent" id="recent">
+    <h2>Recently Made ▶</h2>
+    <div class="rows">
+      <a class="row" href="https://github.com/Zinedinekkb/content-studio" target="_blank" rel="noopener" data-fan="studio">
+        <span class="icon" style="background:#FFFAF5;border:1px solid var(--line)"><svg viewBox="0 0 40 40" width="38" aria-hidden="true"><rect x="5" y="9" width="30" height="22" rx="4" fill="#3E3E42"/><path d="M17 15v10l8-5Z" fill="#FFFAF5"/></svg></span>
+        <div><h3>Content Studio</h3><p>สตูดิโอทำคลิป 5 โมดูลที่เขียนเองด้วย vibe coding</p></div></a>
+      <a class="row" href="https://www.tiktok.com/@sathapannuk" target="_blank" rel="noopener" data-fan="satha">
+        <span class="icon" style="background:#2F6FE4"><span style="font:700 30px Arial,sans-serif;color:#fff">฿</span></span>
+        <div><h3>SaThaPaNuk??</h3><p>สถาปนึก ไม่เน้นอยู่จริง เน้นทำคอนเทนต์ · 15.5K ผู้ติดตาม</p></div></a>
+      <a class="row" href="https://www.tiktok.com/@zine_kkb" target="_blank" rel="noopener" data-fan="zine">
+        <span class="icon" style="background:#111"><span style="font:600 13px var(--mono);color:#fff">ZINE</span></span>
+        <div><h3>zinedine kubkrabee</h3><p>ช่องแบรนด์ส่วนตัว แชร์เรื่องภาษี ระบบร้านอาหาร และ AI</p></div></a>
+    </div>
+    <div class="fan" id="fan" aria-hidden="true">
+      <div class="shot"><div class="scr" style="background:#3E3E42"><b>ออฟฟิศ</b><div class="blk"></div><div class="blk s"></div><div class="blk"></div><div class="blk"></div></div></div>
+      <div class="shot"><div class="scr" style="background:#F76240"><b>บท + ตรวจข้อมูล</b><div class="blk s"></div><div class="blk"></div><div class="blk"></div></div></div>
+      <div class="shot"><div class="scr" style="background:#2F6FE4"><b>ตัดต่อ</b><div class="blk"></div><div class="blk"></div><div class="blk s"></div></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Other Work ⁕</h2>
+    <div class="others">
+      <article class="work">
+        <div class="thumb" style="background:linear-gradient(160deg,#FCE7C8,#F7D74A)"></div>
+        <div><h3>SmartERP &amp; Stock Jin App</h3><p class="meta">Restaurant Stock &amp; ERP | 2026</p><hr><p>ระบบจัดการสต็อก วัตถุดิบ และต้นทุนร้านข้าวมันไก่ ออกแบบจากหน้างานจริงที่จินข้าวมันไก่สไตล์สิงคโปร์</p><a href="https://github.com/Zinedinekkb/smarterp-app" target="_blank" rel="noopener" aria-label="เปิดโปรเจกต์ SmartERP บน GitHub"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></a></div>
+      </article>
+      <article class="work">
+        <div class="thumb" style="background:linear-gradient(160deg,#D9F2E4,#3BB273)"></div>
+        <div><h3>Intra Biz Ops</h3><p class="meta">SOP · POS · Business Workflow | 2026</p><hr><p>ระบบบริหารจัดการหลังบ้านสำหรับผู้ประกอบการ วางมาตรฐาน SOP และเชื่อม Workflow การทำงานในร้าน</p><a href="https://github.com/Zinedinekkb/intra-biz-ops" target="_blank" rel="noopener" aria-label="เปิดโปรเจกต์ Intra Biz Ops บน GitHub"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></a></div>
+      </article>
+      <article class="work">
+        <div class="thumb" style="background:linear-gradient(160deg,#D9E8FF,#2F6FE4)"></div>
+        <div><h3>ซีรีส์รีโนเวทห้องจิ๋ว</h3><p class="meta">TikTok @sathapannuk | 3.6M · 2.6M · 875.9K วิว</p><hr><p>คาแรกเตอร์สถาปนิกหมวกเหลือง เล่าเรื่องบ้าน ห้อง และเงินแบบกวน ๆ เพลย์ลิสต์นี้มี 54 คลิป และเป็นคลิปที่วิวสูงสุดของช่อง</p><a href="https://www.tiktok.com/@sathapannuk" target="_blank" rel="noopener" aria-label="เปิดช่อง TikTok sathapannuk"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></a></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="experience" id="experience">
+    <h2>Experience &amp; Education ✦</h2>
+    <div class="timeline">
+      <article class="exp-card">
+        <div class="exp-head">
+          <h3>ป.ตรี การจัดการ — สาขาคอมพิวเตอร์ธุรกิจ <span class="badge-honor">ว่าที่เกียรตินิยมอันดับ 1</span></h3>
+          <span class="exp-period">กำลังจะจบปีนี้</span>
+        </div>
+        <p class="exp-sub">Business Computer &amp; Management</p>
+        <p>เชื่อมโลกธุรกิจเข้ากับระบบไอที ถนัดการออกแบบระบบหลังบ้าน การจัดการข้อมูล และวาง Workflow ให้ธุรกิจทำงานได้จริงและลดงานซ้ำซ้อน</p>
+      </article>
+
+      <article class="exp-card">
+        <div class="exp-head">
+          <h3>จินข้าวมันไก่สไตล์สิงคโปร์</h3>
+          <span class="exp-period">3 – เกือบ 4 ปี</span>
+        </div>
+        <p class="exp-sub">Restaurant Operations · SOP · POS · ระบบหลังบ้าน</p>
+        <p>ลุยงานร้านอาหารจริงตั้งแต่หน้าบ้านถึงหลังบ้าน วางมาตรฐานการทำงาน (SOP) จัดการระบบ POS สต็อก ต้นทุน และ Workflow การทำงานให้ร้านรันได้ลื่นไหล</p>
+      </article>
+
+      <article class="exp-card">
+        <div class="exp-head">
+          <h3>Butcher (ช่างแล่และจัดการเนื้อ)</h3>
+          <span class="exp-period">2 – 3 ปี (ก่อนเข้ามหาวิทยาลัย)</span>
+        </div>
+        <p class="exp-sub">Hands-on Craft &amp; Raw Material Management</p>
+        <p>เริ่มทำงานจริงตั้งแต่ก่อนเรียนมหาวิทยาลัย ฝึกความละเอียด วินัย ความอดทน และการจัดการวัตถุดิบหน้างานจริงทุกวัน</p>
+      </article>
+    </div>
+
+    <div class="skill-tags" aria-label="ความถนัดหลัก">
+      <span>ระบบร้านอาหาร (F&amp;B Operations)</span>
+      <span>การวาง SOP</span>
+      <span>ระบบ POS</span>
+      <span>ระบบหลังบ้าน (Back-office)</span>
+      <span>Business Workflow</span>
+      <span>ระบบผู้ประกอบการ</span>
+      <span>ภาษี &amp; การเงิน</span>
+      <span>Vibe Coding</span>
+    </div>
+  </section>
+
+  <section class="work-with" id="work-with-me">
+    <h2>Work with me ✉</h2>
+    <div class="stats">
+      <div class="stat"><b>15.5K</b><span>ผู้ติดตาม TikTok<br>@sathapannuk</span></div>
+      <div class="stat"><b>257.5K</b><span>ยอดถูกใจรวม<br>บน TikTok</span></div>
+      <div class="stat"><b>17.3K</b><span>ผู้ติดตาม Instagram<br>@sathapannuk</span></div>
+      <div class="stat"><b>3.6M</b><span>วิวคลิปที่สูงสุด<br>ซีรีส์รีโนเวทห้องจิ๋ว</span></div>
+    </div>
+    <ul class="offer">
+      <li><span><b>คลิปรีวิวในสไตล์ช่อง</b> เอาสินค้าไปอยู่ในเรื่องบ้าน ห้องเล็ก หรือการใช้เงิน เล่าโดยคาแรกเตอร์สถาปนึก</span></li>
+      <li><span><b>คลิปอธิบายให้เข้าใจง่าย</b> เรื่องภาษี การเงิน แอป หรือเครื่องมือ AI สำหรับคนเพิ่งเริ่มทำงาน</span></li>
+      <li><span><b>ระบบและเครื่องมือสำหรับร้าน</b> วาง SOP ระบบหลังบ้าน หรือทำเว็บ/แอปเล็ก ๆ ด้วย vibe coding</span></li>
+    </ul>
+    <div class="cta">
+      <code id="mail">zinedinekkb@gmail.com</code>
+      <button type="button" id="copyMail">คัดลอกอีเมล</button>
+    </div>
+    <p class="small">ตัวเลขจากหน้าโปรไฟล์ TikTok และ Instagram เดือนตุลาคม 2026</p>
+  </section>
+
+  <section class="about">
+    <h2>About ⌘</h2>
+    <p>ผมทำคลิปสั้นเรื่องภาษี การเงิน การตลาด และ vibe coding สำหรับคน Gen Z และผู้ประกอบการรุ่นใหม่</p>
+    <p>ทำงานจริงมาตั้งแต่ก่อนเข้ามหาลัย ทั้งเป็น Butcher 2–3 ปี และลุยงานร้านจินข้าวมันไก่สไตล์สิงคโปร์อีกเกือบ 4 ปี ก่อนจะมาต่อยอดในสายการจัดการ คอมพิวเตอร์ธุรกิจ (ว่าที่เกียรตินิยมอันดับ 1)</p>
+    <p>ชอบเอาประสบการณ์หน้างานจริง ทั้งเรื่องร้านอาหาร SOP ระบบ POS และระบบหลังบ้าน มาผสมกับการเขียนโค้ดสร้างเครื่องมือของตัวเอง เพื่อให้ทำงานและทำคลิปได้นาน ๆ โดยไม่หมดไฟ ☺</p>
+    <footer><a href="https://www.tiktok.com/@sathapannuk" target="_blank" rel="noopener">TikTok (@sathapannuk)</a><span>|</span><a href="https://www.instagram.com/sathapannuk/" target="_blank" rel="noopener">Instagram (@sathapannuk)</a><span>|</span><a href="https://www.tiktok.com/@zine_kkb" target="_blank" rel="noopener">TikTok ส่วนตัว (@zine_kkb)</a><span>|</span><a href="https://github.com/Zinedinekkb" target="_blank" rel="noopener">GitHub (@Zinedinekkb)</a><span>|</span><span>E-mail: <a href="mailto:zinedinekkb@gmail.com" style="user-select:all">zinedinekkb@gmail.com</a></span></footer>
+  </section>
+</main>
+
+<div class="you" id="you" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M1 1l15 6-7 2-2 7Z" fill="#242424"/></svg><span>You</span></div>
+
+<script>
+(() => {
+  // Positions in % of the desk (x, y = top-left), r = degrees. One preset per mode.
+  const P = {
+    chaos: {
+      notebook:[-2,40,-14], stain:[-3,36,0], cup:[30,74,0], receipt:[16,46,-8], clip:[14,15,-6], pen:[26,24,-4],
+      film:[3,60,-18], calc:[72,58,9], sticker:[19,54,14], player:[73,4,0], folder:[67,40,6], airdrop:[66,56,7], tools:[90,42,0]
+    },
+    clean: {
+      notebook:[-30,58,0], stain:[88,72,0], cup:[86,80,0], receipt:[4,6,0], clip:[14,4,0], pen:[31,4,90],
+      film:[2,82,0], calc:[16,74,0], sticker:[86,4,0], player:[76,22,0], folder:[60,4,0], airdrop:[64,70,0], tools:[92,34,0]
+    },
+    notebook: {
+      notebook:[21,10,0], stain:[60,58,0], cup:[66,-14,0], receipt:[-20,40,0], clip:[22,6,-4], pen:[64,8,10],
+      film:[-20,80,0], calc:[110,60,0], sticker:[110,10,0], player:[110,30,0], folder:[110,80,0], airdrop:[14,62,-6], tools:[84,24,0]
+    }
+  };
+  const hiddenIn = { notebook:new Set(['receipt','film','calc','sticker','player','folder']) };
+  const toastText = { chaos:'โต๊ะรกแบบมีศิลปะ', clean:'เก็บโต๊ะแล้ว', notebook:'โหมดสมุดโน้ต' };
+
+  const desk = document.getElementById('desk');
+  const objs = [...desk.querySelectorAll('.obj')];
+  const state = {}; let top = 20;
+  const toast = msg => { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on');
+    clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 1600); };
+
+  // The toolbox is kept fully on screen so it can always be reached; everything else may hang off the edge.
+  const place = el => { const s = state[el.dataset.id];
+    let x = s.x * desk.clientWidth / 100, y = s.y * desk.clientHeight / 100;
+    if (el.dataset.id === 'tools') { x = Math.max(8, Math.min(x, desk.clientWidth - el.offsetWidth - 8)); y = Math.max(8, Math.min(y, desk.clientHeight - el.offsetHeight - 8)); }
+    el.style.transform = `translate(${x}px, ${y}px) rotate(${s.r}deg)`; };
+
+  function setMode(m, quiet) {
+    objs.forEach(el => { const [x, y, r] = P[m][el.dataset.id]; state[el.dataset.id] = { x, y, r };
+      el.classList.toggle('gone', !!hiddenIn[m]?.has(el.dataset.id)); place(el); });
+    document.querySelectorAll('.menu button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === m));
+    if (!quiet) toast(toastText[m]);
+  }
+  document.querySelectorAll('.menu button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+
+  // Drag any object; it jumps to the top of the pile (the toolbox always stays above the drawing).
+  objs.forEach(el => el.addEventListener('pointerdown', e => {
+    if (e.target.closest('button, label, a, input, .bar')) return;
+    const s = state[el.dataset.id], sx = e.clientX, sy = e.clientY, ox = s.x, oy = s.y;
+    el.setPointerCapture(e.pointerId); el.classList.add('drag');
+    if (el.dataset.id !== 'tools') el.style.zIndex = top = Math.min(top + 1, 999);
+    const move = ev => { s.x = ox + (ev.clientX - sx) / desk.clientWidth * 100; s.y = oy + (ev.clientY - sy) / desk.clientHeight * 100; place(el); };
+    const up = () => { el.classList.remove('drag'); el.removeEventListener('pointermove', move); };
+    el.addEventListener('pointermove', move); el.addEventListener('pointerup', up, { once: true }); el.addEventListener('pointercancel', up, { once: true });
+  }));
+
+  // ---------- Record player: Oh Yeah? — Steve Lacy ----------
+  const audio = document.getElementById('audio'), playBtn = document.getElementById('play'), player = document.getElementById('player');
+  const note = document.getElementById('note'), prog = document.getElementById('prog'), bar = document.getElementById('bar'), time = document.getElementById('time');
+  const fmt = s => isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}` : '–:––';
+  const setPlaying = on => { player.classList.toggle('on', on); playBtn.textContent = on ? '❚❚ พัก' : '▶ เล่น'; playBtn.setAttribute('aria-pressed', on); };
+  let objectUrl = null;
+  document.getElementById('song').addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(f); audio.src = objectUrl; note.textContent = '';
+    audio.play().catch(err => { note.textContent = 'เล่นไฟล์นี้ไม่ได้ ลองไฟล์ .mp3 หรือ .m4a'; setPlaying(false); });
+  });
+  playBtn.addEventListener('click', () => {
+    if (!audio.src) { note.textContent = 'ยังไม่มีไฟล์เพลง กด "เลือกไฟล์เพลง" แล้วเลือก Oh Yeah? ในเครื่อง หรือฟังบน Spotify'; return; }
+    if (audio.paused) audio.play().catch(() => { note.textContent = 'เบราว์เซอร์ไม่ยอมเล่นเพลงนี้'; }); else audio.pause();
+  });
+  audio.addEventListener('play', () => setPlaying(true));
+  audio.addEventListener('pause', () => setPlaying(false));
+  audio.addEventListener('ended', () => setPlaying(false));
+  audio.addEventListener('error', () => { note.textContent = 'เปิดไฟล์เพลงไม่ได้ ลองไฟล์ .mp3 หรือ .m4a'; setPlaying(false); });
+  audio.addEventListener('timeupdate', () => { const p = audio.duration ? audio.currentTime / audio.duration * 100 : 0;
+    prog.style.width = p + '%'; bar.setAttribute('aria-valuenow', Math.round(p)); time.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`; });
+  audio.addEventListener('loadedmetadata', () => { time.textContent = `0:00 / ${fmt(audio.duration)}`; });
+  bar.addEventListener('pointerdown', e => { if (!audio.duration) return; const r = bar.getBoundingClientRect();
+    audio.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * audio.duration; });
+  bar.addEventListener('keydown', e => { if (!audio.duration) return;
+    if (e.key === 'ArrowRight') audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+    if (e.key === 'ArrowLeft') audio.currentTime = Math.max(0, audio.currentTime - 5); });
+
+  // ---------- Paint: draw on the desk ----------
+  const cv = document.getElementById('paint'), ctx = cv.getContext('2d');
+  let tool = 'move', color = '#242424', W = 0, H = 0;
+  const WIDTH = { pencil: 2, brush: 9, eraser: 24, line: 3, rect: 3, ellipse: 3 };
+  function fit() {
+    const d = window.devicePixelRatio || 1, w = desk.clientWidth, h = desk.clientHeight;
+    if (w === W && h === H) return;
+    let keep = null;
+    if (W) { keep = document.createElement('canvas'); keep.width = cv.width; keep.height = cv.height; keep.getContext('2d').drawImage(cv, 0, 0); }
+    cv.width = Math.round(w * d); cv.height = Math.round(h * d); ctx.setTransform(d, 0, 0, d, 0, 0);
+    if (keep) ctx.drawImage(keep, 0, 0, w, h);
+    W = w; H = h;
+  }
+  const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+
+  document.querySelectorAll('.tools [data-tool]').forEach(b => b.addEventListener('click', () => {
+    tool = b.dataset.tool;
+    document.querySelectorAll('.tools [data-tool]').forEach(x => x.setAttribute('aria-pressed', x === b));
+    desk.classList.toggle('drawing', tool !== 'move'); cv.classList.toggle('t-text', tool === 'text');
+    toast(tool === 'move' ? 'โหมดย้ายของ' : `ใช้ ${b.title}`);
+  }));
+  document.querySelectorAll('.swatches button').forEach(b => b.addEventListener('click', () => {
+    color = b.dataset.color; document.querySelectorAll('.swatches button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  }));
+  document.getElementById('clear').addEventListener('click', () => { ctx.clearRect(0, 0, W, H); toast('ล้างรูปแล้ว'); });
+
+  const spray = (x, y) => { ctx.fillStyle = color; for (let i = 0; i < 24; i++) {
+    const a = Math.random() * Math.PI * 2, r = Math.random() * 14; ctx.fillRect(x + Math.cos(a) * r, y + Math.sin(a) * r, 1.4, 1.4); } };
+  const shape = (t, x0, y0, x1, y1) => { ctx.beginPath();
+    if (t === 'line') { ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); }
+    if (t === 'rect') ctx.rect(x0, y0, x1 - x0, y1 - y0);
+    if (t === 'ellipse') ctx.ellipse((x0 + x1) / 2, (y0 + y1) / 2, Math.abs(x1 - x0) / 2, Math.abs(y1 - y0) / 2, 0, 0, Math.PI * 2);
+    ctx.stroke(); };
+
+  function typeAt(x, y) {
+    const box = document.createElement('input');
+    box.className = 'typing'; box.style.left = x + 'px'; box.style.top = (y - 16) + 'px'; box.style.color = color;
+    box.setAttribute('aria-label', 'พิมพ์ข้อความ แล้วกด Enter'); desk.appendChild(box); setTimeout(() => box.focus(), 0);
+    let done = false;
+    const finish = save => { if (done) return; done = true;
+      if (save && box.value.trim()) { ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = color;
+        ctx.font = '500 22px Mali, "Comic Sans MS", cursive'; ctx.textBaseline = 'middle'; ctx.fillText(box.value, x + 5, y); }
+      box.remove(); };
+    box.addEventListener('keydown', e => { if (e.key === 'Enter') finish(true); if (e.key === 'Escape') finish(false); });
+    box.addEventListener('blur', () => finish(true));
+  }
+
+  cv.addEventListener('pointerdown', e => {
+    if (tool === 'move') return;
+    e.preventDefault(); fit();
+    const [x0, y0] = pos(e);
+    if (tool === 'text') { typeAt(x0, y0); return; }
+    cv.setPointerCapture(e.pointerId);
+    ctx.globalCompositeOperation = tool === 'eraser' ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = color; ctx.lineWidth = WIDTH[tool] || 3; ctx.lineCap = ctx.lineJoin = 'round';
+    const snap = ['line', 'rect', 'ellipse'].includes(tool) ? ctx.getImageData(0, 0, cv.width, cv.height) : null;
+    let lx = x0, ly = y0;
+    if (tool === 'spray') spray(x0, y0);
+    else if (!snap) { ctx.beginPath(); ctx.arc(x0, y0, ctx.lineWidth / 2, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill(); }
+    const move = ev => { const [x, y] = pos(ev);
+      if (snap) { ctx.putImageData(snap, 0, 0); shape(tool, x0, y0, x, y); }
+      else if (tool === 'spray') spray(x, y);
+      else { ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(x, y); ctx.stroke(); }
+      lx = x; ly = y; };
+    const up = () => { cv.removeEventListener('pointermove', move); ctx.globalCompositeOperation = 'source-over'; };
+    cv.addEventListener('pointermove', move); cv.addEventListener('pointerup', up, { once: true }); cv.addEventListener('pointercancel', up, { once: true });
+  });
+
+  window.addEventListener('resize', () => { objs.forEach(place); fit(); });
+
+  // A second "multiplayer" cursor wanders over the desk.
+  const peer = document.getElementById('peer');
+  const spots = [[62, 30], [20, 70], [70, 78], [40, 18], [80, 50]]; let k = 0;
+  const wander = () => { const [x, y] = spots[k++ % spots.length]; peer.style.transform = `translate(${x * desk.clientWidth / 100}px, ${y * desk.clientHeight / 100}px)`; };
+  wander(); setInterval(wander, 3200);
+
+  // AirDrop decline button
+  const declineBtn = document.getElementById('airdrop-decline');
+  if (declineBtn) declineBtn.addEventListener('click', () => toast('เสียดายจัง กด "รับ" ไปดูคลิปใน TikTok ได้นะ!'));
+
+  // Copy the email (mailto links often do nothing inside embedded pages).
+  const copyBtn = document.getElementById('copyMail');
+  copyBtn.addEventListener('click', () => {
+    const mail = document.getElementById('mail').textContent;
+    const selectIt = () => { const r = document.createRange(); r.selectNodeContents(document.getElementById('mail'));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r); copyBtn.textContent = 'กด Ctrl+C เพื่อคัดลอก'; };
+    if (!navigator.clipboard) return selectIt();
+    navigator.clipboard.writeText(mail).then(() => { copyBtn.textContent = 'คัดลอกแล้ว ✓'; setTimeout(() => copyBtn.textContent = 'คัดลอกอีเมล', 1800); }, selectIt);
+  });
+
+  // Recently made: your own named cursor + screens fanning out on hover.
+  const you = document.getElementById('you'), fan = document.getElementById('fan');
+  const fanShots = [...fan.querySelectorAll('.scr')];
+  const fanData = {
+    studio: [['#3E3E42','คิดไอเดีย + ตารางโพสต์'],['#F76240','บท + ตรวจข้อมูลภาษี'],['#2F6FE4','ตัดต่อ + ซับไทย']],
+    satha:  [['#2F6FE4','ภาษีเข้าใจใน 45 วิ'],['#F7D74A','มาสคอตสถาปนิก'],['#3E3E42','ระบบหลังบ้าน']],
+    zine:   [['#111111','zinedine kubkrabee'],['#3BB273','SOP & POS ร้านอาหาร'],['#F76240','Vibe Coding & AI']]
+  };
+  const setFan = key => {
+    const items = fanData[key] || fanData.studio;
+    fanShots.forEach((scr, i) => {
+      scr.style.background = items[i][0];
+      scr.querySelector('b').textContent = items[i][1];
+    });
+  };
+  const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+  document.querySelectorAll('.row').forEach(r => {
+    r.addEventListener('pointerenter', () => { setFan(r.dataset.fan); fan.classList.add('on'); if (fine) you.classList.add('on'); });
+    r.addEventListener('pointerleave', () => { fan.classList.remove('on'); you.classList.remove('on'); });
+    r.addEventListener('pointermove', e => { you.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`; });
+    r.addEventListener('focus', () => { setFan(r.dataset.fan); fan.classList.add('on'); });
+    r.addEventListener('blur', () => fan.classList.remove('on'));
+  });
+
+  fit(); setMode('chaos', true);
+})();
+</script>
+</body>
+</html>

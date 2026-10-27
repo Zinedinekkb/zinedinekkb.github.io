@@ -33,7 +33,8 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--pop);outline-offset:3px;border-radius:6px}
 
 /* ---------- desk hero ---------- */
-.desk{position:relative;container-type:inline-size;height:min(92cqw,760px);min-height:560px;overflow:hidden;user-select:none}
+/* objects may be dragged anywhere down the page: clipped only at the sides (no sideways scroll), and painted above the sections */
+.desk{position:relative;z-index:5;container-type:inline-size;height:min(92cqw,760px);min-height:560px;overflow-x:clip;overflow-y:visible;user-select:none}
 @supports not (height:1cqw){.desk{height:680px}}
 .obj{position:absolute;left:0;top:0;cursor:grab;touch-action:none;
   transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .4s;will-change:transform;filter:drop-shadow(0 6px 10px rgba(60,40,20,.14))}
@@ -111,7 +112,7 @@ a{color:inherit}
 .peer span{display:inline-block;margin:-2px 0 0 12px;background:var(--pop);color:#fff;font:600 12px system-ui,sans-serif;padding:7px 14px;border-radius:24px}
 
 /* ---------- sections ---------- */
-main{max-width:1040px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:40px 120px;display:grid;gap:96px}
+main{max-width:1040px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:40px 120px;display:grid;grid-template-columns:minmax(0,1fr);gap:96px}
 h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
 .cooking p{margin:0 0 12px;line-height:1.7;max-width:62ch}
 .inline-app{display:inline-flex;align-items:center;gap:8px;vertical-align:middle}
@@ -182,6 +183,18 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
 .offer li{display:grid;grid-template-columns:22px 1fr;gap:8px;line-height:1.5;font-size:15px}
 .offer li::before{content:"✎";color:var(--pop)}
 .offer b{color:var(--ink);font-weight:600}
+
+/* ---------- scroll extras (paper on a desk): pencil progress line, scribbled headings, cards dropped like paper, counting stats ---------- */
+.pencil{position:fixed;left:0;top:0;right:0;height:14px;z-index:1500;pointer-events:none}
+.pencil i{position:absolute;left:0;top:6px;height:2px;width:0;background:var(--pop);border-radius:2px;opacity:.85}
+.pencil svg{position:absolute;top:0;left:0;width:30px;height:14px;transform:translateX(-27px)}
+h2.scrib{position:relative;display:inline-block}
+h2.scrib svg{position:absolute;left:-4px;right:-4px;bottom:-10px;width:calc(100% + 8px);height:12px;overflow:visible}
+h2.scrib path{fill:none;stroke:var(--pop);stroke-width:3;stroke-linecap:round;opacity:.75;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s cubic-bezier(.6,0,.2,1) .15s}
+h2.scrib.in path{stroke-dashoffset:0}
+.drop{opacity:0;translate:0 28px;rotate:var(--tilt,2deg);transition:opacity .5s ease var(--d,0s),translate .7s cubic-bezier(.2,1.3,.4,1) var(--d,0s),rotate .7s cubic-bezier(.2,1.3,.4,1) var(--d,0s),transform .35s cubic-bezier(.2,.8,.2,1),background .2s}
+.drop.in{opacity:1;translate:0 0;rotate:0deg}
+@media (prefers-reduced-motion:reduce){.drop{opacity:1;translate:none;rotate:none;transition:none}h2.scrib path{transition:none;stroke-dashoffset:0}}
 .cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;max-width:620px}
 .cta code{font:500 15px var(--mono);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;user-select:all;word-break:break-all}
 .cta button{font:500 13px var(--mono);border:0;border-radius:10px;padding:11px 16px;background:var(--you);color:#fff;cursor:pointer}
@@ -199,7 +212,7 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
 <body>
 
 <!-- ============ HERO: the desk ============ -->
-<section class="desk" id="desk" aria-label="โต๊ะทำงาน ลากของบนโต๊ะได้ และวาดรูปด้วยแผงเครื่องมือ">
+<section class="desk" id="desk" aria-label="โต๊ะทำงาน ลากของไปวางตรงไหนของหน้าก็ได้ และวาดรูปบนโต๊ะด้วยแผงเครื่องมือ">
 
   <!-- notebook (open, grid paper) -->
   <div class="obj" data-id="notebook" style="width:58cqw;z-index:1">
@@ -453,6 +466,7 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
   </section>
 </main>
 
+<div class="pencil" id="pencil" aria-hidden="true"><i></i><svg viewBox="0 0 30 14"><path d="M2 4h20l6 3-6 3H2Z" fill="#F2C14E" stroke="#3E3E42" stroke-width="1"/><path d="M22 4l6 3-6 3Z" fill="#E8D3B0" stroke="#3E3E42" stroke-width="1"/><path d="M26 6l2 1-2 1Z" fill="#3E3E42"/><rect x="0" y="4" width="4" height="6" rx="1" fill="#F76240" stroke="#3E3E42" stroke-width="1"/></svg></div>
 <div class="you" id="you" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M1 1l15 6-7 2-2 7Z" fill="#242424"/></svg><span>You</span></div>
 
 <script>
@@ -495,15 +509,27 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
   }
   document.querySelectorAll('.menu button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
 
-  // Drag any object; it jumps to the top of the pile (the toolbox always stays above the drawing).
+  // Drag any object anywhere on the page; it jumps to the top of the pile (the toolbox always stays above the drawing).
+  // Near the top/bottom of the window the page scrolls, so an object can be carried down to any section.
+  // Half of an object always stays on the page so it can be grabbed again.
+  const main = document.querySelector('main');
   objs.forEach(el => el.addEventListener('pointerdown', e => {
     if (e.target.closest('button, label, a, input, .bar')) return;
-    const s = state[el.dataset.id], sx = e.clientX, sy = e.clientY, ox = s.x, oy = s.y;
+    const s = state[el.dataset.id], sx = e.clientX, sy = e.clientY, sy0 = scrollY, ox = s.x, oy = s.y;
+    let cx = sx, cy = sy, raf = 0;
     el.setPointerCapture(e.pointerId); el.classList.add('drag');
     if (el.dataset.id !== 'tools') el.style.zIndex = top = Math.min(top + 1, 999);
-    const move = ev => { s.x = ox + (ev.clientX - sx) / desk.clientWidth * 100; s.y = oy + (ev.clientY - sy) / desk.clientHeight * 100; place(el); };
-    const up = () => { el.classList.remove('drag'); el.removeEventListener('pointermove', move); };
+    const apply = () => {
+      const w = desk.clientWidth, h = desk.clientHeight, hw = el.offsetWidth / 2, hh = el.offsetHeight / 2;
+      const x = Math.max(-hw, Math.min(w - hw, (ox * w / 100) + cx - sx));
+      const y = Math.max(-hh, Math.min(main.offsetTop + main.offsetHeight - desk.offsetTop - hh, (oy * h / 100) + cy - sy + scrollY - sy0));
+      s.x = x / w * 100; s.y = y / h * 100; place(el); };
+    const edge = () => { const v = cy < 60 ? -1 : cy > innerHeight - 60 ? 1 : 0;
+      if (v) { scrollBy(0, v * 14); apply(); } raf = requestAnimationFrame(edge); };
+    const move = ev => { cx = ev.clientX; cy = ev.clientY; apply(); };
+    const up = () => { el.classList.remove('drag'); el.removeEventListener('pointermove', move); cancelAnimationFrame(raf); };
     el.addEventListener('pointermove', move); el.addEventListener('pointerup', up, { once: true }); el.addEventListener('pointercancel', up, { once: true });
+    raf = requestAnimationFrame(edge);
   }));
 
   // ---------- Record player: oh yeah? — Steve Lacy (Spotify iFrame API) ----------
@@ -651,6 +677,33 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
     r.addEventListener('focus', () => { setFan(r.dataset.fan); fan.classList.add('on'); });
     r.addEventListener('blur', () => fan.classList.remove('on'));
   });
+
+  // ---------- Scroll extras ----------
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Pencil line: how far down the page you are.
+  const pencil = document.getElementById('pencil'), lead = pencil.querySelector('i'), tip = pencil.querySelector('svg');
+  const progress = () => { const max = document.documentElement.scrollHeight - innerHeight, w = innerWidth * (max > 0 ? scrollY / max : 0);
+    lead.style.width = w + 'px'; tip.style.transform = `translateX(${w - 27}px)`; };
+  addEventListener('scroll', progress, { passive: true }); addEventListener('resize', progress); progress();
+
+  // Headings get a hand-drawn scribble underneath; cards drop in like paper, a little tilted, one after another.
+  main.querySelectorAll('h2').forEach(h => { h.classList.add('scrib');
+    h.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M1 8C18 3 34 10 52 6S84 3 99 7"/></svg>'); });
+  const groups = ['.row', '.work', '.exp-card', '.stat', '.offer li', '.skill-tags > *'];
+  groups.forEach(sel => main.querySelectorAll(sel).forEach((el, i) => { el.classList.add('drop');
+    el.style.setProperty('--tilt', (i % 2 ? -1 : 1) * (1.5 + (i % 3)) + 'deg'); el.style.setProperty('--d', Math.min(i, 6) * 0.08 + 's'); }));
+
+  // Channel stats count up to their real value (the final text is exactly what the page says).
+  const countUp = el => { const m = el.textContent.match(/^([\d.]+)(\D*)$/); if (!m || still) return;
+    const end = parseFloat(m[1]), dec = (m[1].split('.')[1] || '').length, t0 = performance.now();
+    const step = t => { const k = Math.min(1, (t - t0) / 1200), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = (end * e).toFixed(dec) + m[2]; if (k < 1) requestAnimationFrame(step); else el.textContent = m[1] + m[2]; };
+    requestAnimationFrame(step); };
+
+  const seen = new IntersectionObserver(entries => entries.forEach(en => { if (!en.isIntersecting) return;
+    en.target.classList.add('in'); seen.unobserve(en.target);
+    if (en.target.classList.contains('stat')) countUp(en.target.querySelector('b')); }), { rootMargin: '0px 0px -12% 0px' });
+  main.querySelectorAll('h2.scrib, .drop').forEach(el => seen.observe(el));
 
   fit(); setMode('chaos', true);
 })();

@@ -172,6 +172,41 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
 .exp-card p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
 .badge-honor{display:inline-block;background:#FCE7C8;color:#7a4b12;border:1px solid #e9cda0;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:middle}
 .skill-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;max-width:560px}
+/* certificates: paper cards held on with a strip of washi tape */
+.cert-lead{margin:-8px 0 24px;font-size:13px;color:var(--ink-3)}
+.cert-group{margin-bottom:30px}
+.cert-group h3{margin:0 0 14px;font:500 13px var(--mono);color:var(--ink-3);letter-spacing:.03em}
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:20px;max-width:780px}
+.cert{display:flex;flex-direction:column;gap:4px;text-align:left;font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 14px 14px;cursor:zoom-in;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),background .2s}
+.cert:hover,.cert:focus-visible{background:#fff;transform:translateY(-3px)}
+.cert .pic{position:relative;display:block;margin-bottom:8px}
+.cert .pic::before{content:"";position:absolute;z-index:2;top:-9px;left:50%;width:58px;height:17px;translate:-50% 0;rotate:-4deg;background:rgba(247,98,64,.32);border-radius:2px}
+.cert img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;background:#fff;border-radius:6px;box-shadow:0 3px 10px rgba(40,30,20,.13);rotate:-1.5deg;transition:rotate .35s,scale .35s}
+.cert:nth-child(even) img{rotate:1.5deg}
+.cert:hover img{rotate:0deg;scale:1.03}
+.cert b{font:600 13px/1.4 var(--mono);color:var(--ink)}
+.cert span:not(.pic){font-size:11px;line-height:1.45;color:var(--ink-3)}
+.cert-stack{grid-column:1/-1;flex-direction:row;align-items:flex-start;gap:22px;cursor:default}
+.cert-stack:hover{transform:none}
+.cert-stack .stack{flex:none;width:190px;height:150px}
+.cert-stack .stack img{position:absolute;left:0;top:6px;width:100%;rotate:-6deg}
+.cert-stack .stack img:nth-child(2){left:8px;top:2px;rotate:3deg}
+.cert-stack .stack img:nth-child(3){left:4px;top:10px;rotate:-1deg}
+.cert-stack:hover .stack img:nth-child(1){rotate:-10deg;translate:-8px 0}
+.cert-stack:hover .stack img:nth-child(2){rotate:7deg;translate:10px 0}
+.cert-stack b,.cert-stack div>span{display:block;margin-bottom:4px}
+.cert-stack ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:2px}
+.cert-stack li button{font:inherit;font-size:13px;text-align:left;color:var(--ink-2);background:none;border:0;padding:4px 0;cursor:zoom-in}
+.cert-stack li button::before{content:"✎ ";color:var(--pop)}
+.cert-stack li button:hover{color:var(--pop);text-decoration:underline}
+@media (max-width:560px){.cert-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cert{padding:12px 10px 10px}.cert b{font-size:12px}
+  .cert-stack{flex-direction:column}.cert-stack .stack{width:100%;max-width:240px;height:auto;aspect-ratio:4/3}}
+.viewer{border:0;padding:0;background:none;max-width:min(94vw,1100px);max-height:92vh;overflow:visible}
+.viewer::backdrop{background:rgba(40,30,20,.6)}
+.viewer img{display:block;max-width:100%;max-height:82vh;width:auto;height:auto;border-radius:8px;box-shadow:0 20px 50px rgba(0,0,0,.35);background:#fff}
+.viewer form{text-align:center;margin-top:12px}
+.viewer button{font:500 14px var(--mono);border:0;border-radius:10px;padding:10px 18px;background:var(--paper);color:var(--ink);cursor:pointer}
 .skill-tags span{font-size:12px;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:5px 11px;border-radius:99px}
 
 /* work with me (for brands) */
@@ -435,6 +470,63 @@ h2.scrib.in path{stroke-dashoffset:0}
       <span>ภาษี &amp; การเงิน</span>
       <span>Vibe Coding</span>
     </div>
+  </section>
+
+  <!-- certificates: images rendered from the creator's PDFs in D:\Cerlificate (certs/<id>.jpg full, <id>-s.jpg thumbnail) -->
+  <section class="certs" id="certificates">
+    <h2>Certificates ✧</h2>
+    <p class="cert-lead">ใบรับรองทั้งหมด 14 ใบ กดที่ใบไหนก็ได้เพื่อดูเต็ม ๆ</p>
+
+    <div class="cert-group">
+      <h3>AI &amp; Google</h3>
+      <div class="cert-grid">
+        <button type="button" class="cert" data-full="certs/gemini-educator.jpg"><span class="pic"><img src="certs/gemini-educator-s.jpg" alt="ใบรับรอง Gemini Certified Educator" loading="lazy" width="360" height="279"></span>
+          <b>Gemini Certified Educator</b><span>Google for Education · 17 ต.ค. 2568 (ใช้ได้ถึง ต.ค. 2571)</span></button>
+        <button type="button" class="cert" data-full="certs/gemini-student.jpg"><span class="pic"><img src="certs/gemini-student-s.jpg" alt="ใบรับรอง Gemini Certified Student (University)" loading="lazy" width="360" height="279"></span>
+          <b>Gemini Certified Student (University)</b><span>Google for Education · 17 ต.ค. 2568 (ใช้ได้ถึง ต.ค. 2571)</span></button>
+        <div class="cert cert-stack">
+          <span class="pic stack" aria-hidden="true"><img src="certs/ai-guide-s.jpg" alt="" loading="lazy"><img src="certs/ai-mcp-s.jpg" alt="" loading="lazy"><img src="certs/ai-daily-s.jpg" alt="" loading="lazy"></span>
+          <div><b>บทเรียน AI 6 วิชา (TH AI Passport)</b><span>สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27 ต.ค. 2569</span>
+            <ul>
+              <li><button type="button" data-full="certs/ai-daily.jpg">เพิ่มประสิทธิภาพงานประจำวันด้วย AI</button></li>
+              <li><button type="button" data-full="certs/ai-how.jpg">AI เรียนรู้อย่างไร? เปิดเผยเบื้องหลังแบบเข้าใจง่าย</button></li>
+              <li><button type="button" data-full="certs/ai-guide.jpg">คู่มือสร้างทักษะการใช้ AI อย่างเป็นระบบ</button></li>
+              <li><button type="button" data-full="certs/ai-mcp.jpg">แก้ปมโค้ดตกรุ่นและปัญหา Syntax เก่า ด้วย MCP และ Context7</button></li>
+              <li><button type="button" data-full="certs/ai-check.jpg">การตรวจสอบและปรับปรุงผลลัพธ์จาก AI</button></li>
+              <li><button type="button" data-full="certs/ai-context.jpg">การบริหาร Context window เพื่อใช้ AI อย่างคุ้มค่า</button></li>
+            </ul></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cert-group">
+      <h3>ความปลอดภัยไซเบอร์</h3>
+      <div class="cert-grid">
+        <button type="button" class="cert" data-full="certs/cyber-basic.jpg"><span class="pic"><img src="certs/cyber-basic-s.jpg" alt="ประกาศนียบัตร ความมั่นคงปลอดภัยไซเบอร์ระดับพื้นฐาน" loading="lazy" width="360" height="510"></span>
+          <b>ความมั่นคงปลอดภัยไซเบอร์ระดับพื้นฐาน (22 ชม.)</b><span>สำนักงาน ก.พ. · 11 ก.พ. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/cyber-practitioner.jpg"><span class="pic"><img src="certs/cyber-practitioner-s.jpg" alt="ประกาศนียบัตร Cybersecurity Principle for Technology Practitioners" loading="lazy" width="360" height="510"></span>
+          <b>Cybersecurity Principle for Technology Practitioners (2 ชม.)</b><span>สำนักงาน ก.พ. ร่วมกับ สดช. · 1 มี.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/mooc-data.jpg"><span class="pic"><img src="certs/mooc-data-s.jpg" alt="ใบรับรอง Thai MOOC การวิเคราะห์ความมั่นคงปลอดภัยของระบบและการบริหารจัดการข้อมูล" loading="lazy" width="360" height="255"></span>
+          <b>การวิเคราะห์ความมั่นคงปลอดภัยของระบบและการบริหารจัดการข้อมูล (7 ชม.)</b><span>Thai MOOC · มทร.ตะวันออก · 16 ก.พ. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/mooc-network.jpg"><span class="pic"><img src="certs/mooc-network-s.jpg" alt="ใบรับรอง Thai MOOC การวิเคราะห์ความมั่นคงปลอดภัยเครือข่ายองค์กร" loading="lazy" width="360" height="255"></span>
+          <b>ความมั่นคงปลอดภัยเครือข่ายองค์กร ประเมินและจัดการช่องโหว่ (6 ชม.)</b><span>Thai MOOC · มทร.ตะวันออก · 2 มี.ค. 2569</span></button>
+      </div>
+    </div>
+
+    <div class="cert-group">
+      <h3>อื่น ๆ</h3>
+      <div class="cert-grid">
+        <button type="button" class="cert" data-full="certs/power-platform.jpg"><span class="pic"><img src="certs/power-platform-s.jpg" alt="ประกาศนียบัตร Microsoft Power Platform" loading="lazy" width="360" height="255"></span>
+          <b>Microsoft Power Platform (Microsoft Digital Literacy)</b><span>มหาวิทยาลัยราชภัฏรำไพพรรณี · 19 ต.ค. 2567</span></button>
+        <button type="button" class="cert" data-full="certs/rcr.jpg"><span class="pic"><img src="certs/rcr-s.jpg" alt="Certificate of Completion Responsible Conduct of Research" loading="lazy" width="360" height="258"></span>
+          <b>Responsible Conduct of Research (RCR)</b><span>สำนักงานการวิจัยแห่งชาติ (วช.) · 8 ต.ค. 2568</span></button>
+      </div>
+    </div>
+
+    <dialog class="viewer" id="viewer" aria-label="ดูใบรับรอง">
+      <img id="viewerImg" alt="">
+      <form method="dialog"><button type="submit">ปิด ✕</button></form>
+    </dialog>
   </section>
 
   <section class="work-with" id="work-with-me">
@@ -701,7 +793,7 @@ h2.scrib.in path{stroke-dashoffset:0}
   // Headings get a hand-drawn scribble underneath; cards drop in like paper, a little tilted, one after another.
   main.querySelectorAll('h2').forEach(h => { h.classList.add('scrib');
     h.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M1 8C18 3 34 10 52 6S84 3 99 7"/></svg>'); });
-  const groups = ['.row', '.work', '.exp-card', '.stat', '.offer li', '.skill-tags > *'];
+  const groups = ['.row', '.work', '.exp-card', '.stat', '.offer li', '.skill-tags > *', '.cert'];
   groups.forEach(sel => main.querySelectorAll(sel).forEach((el, i) => { el.classList.add('drop');
     el.style.setProperty('--tilt', (i % 2 ? -1 : 1) * (1.5 + (i % 3)) + 'deg'); el.style.setProperty('--d', Math.min(i, 6) * 0.08 + 's'); }));
 
@@ -716,6 +808,12 @@ h2.scrib.in path{stroke-dashoffset:0}
     en.target.classList.add('in'); seen.unobserve(en.target);
     if (en.target.classList.contains('stat')) countUp(en.target.querySelector('b')); }), { rootMargin: '0px 0px -12% 0px' });
   main.querySelectorAll('h2.scrib, .drop').forEach(el => seen.observe(el));
+
+  // Certificates: open the full-size image; clicking outside it closes the viewer.
+  const viewer = document.getElementById('viewer'), viewerImg = document.getElementById('viewerImg');
+  document.querySelectorAll('#certificates [data-full]').forEach(b => b.addEventListener('click', () => {
+    viewerImg.src = b.dataset.full; viewerImg.alt = (b.querySelector('b') || b).textContent.trim(); viewer.showModal(); }));
+  viewer.addEventListener('click', e => { if (e.target === viewer) viewer.close(); });
 
   fit(); setMode('chaos', true);
 })();

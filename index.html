@@ -77,6 +77,8 @@ a{color:inherit}
 .player .ctl{display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-top:2px}
 .player button,.player label{font:inherit;font-size:11px;border:0;background:none;color:var(--ink);cursor:pointer;padding:2px 6px;border-radius:6px}
 .player button:hover,.player label:hover{background:var(--chip)}
+.player .spot{margin:6px 0 4px;border-radius:12px;overflow:hidden}
+.player .spot iframe{display:block;border:0}
 .player .note{display:block;margin-top:4px;color:var(--pop);line-height:1.35}
 .player .note:empty{display:none}
 .player a{display:block;margin-top:4px;color:var(--ink-3);text-decoration:none}
@@ -257,20 +259,19 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
     <svg viewBox="0 0 110 110" aria-hidden="true"><circle cx="55" cy="55" r="52" fill="#fff"/><circle cx="55" cy="55" r="45" fill="#2F6FE4"/><path id="arc" d="M22 55a33 33 0 0 1 66 0" fill="none"/><text font-family="IBM Plex Mono,monospace" font-weight="600" font-size="9.5" fill="#fff" letter-spacing="1"><textPath href="#arc" startOffset="50%" text-anchor="middle">SA THA PA NUK</textPath></text><text x="55" y="75" text-anchor="middle" font-size="26" fill="#fff" font-family="Arial,sans-serif">฿</text></svg>
   </div>
 
-  <!-- music player: Oh Yeah? by Steve Lacy. The song is not bundled (copyright); the visitor picks their own copy or opens Spotify. -->
+  <!-- music player: oh yeah? by Steve Lacy, played through the Spotify embed (loaded on the first ▶, so the page stays light) -->
   <div class="obj" data-id="player" style="width:max(19cqw,150px);z-index:10">
     <div class="player" id="player">
       <div class="vinyl"></div>
-      <span class="artist">Steve Lacy</span><b>Oh Yeah?</b>
+      <span class="artist">Steve Lacy</span><b>oh yeah?</b>
       <div class="bar" id="bar" role="slider" aria-label="ตำแหน่งเพลง" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><i id="prog"></i></div>
-      <span class="time" id="time">0:00 / –:––</span>
+      <span class="time" id="time">0:00 / 2:50</span>
       <div class="ctl">
         <button type="button" id="play" aria-pressed="false">▶ เล่น</button>
-        <label for="song">เลือกไฟล์เพลง</label><input type="file" id="song" accept="audio/*" hidden>
       </div>
       <span class="note" id="note" role="status"></span>
-      <a href="https://open.spotify.com/search/Oh%20Yeah%3F%20Steve%20Lacy" target="_blank" rel="noopener">ฟังบน Spotify ↗</a>
-      <audio id="audio" preload="metadata"></audio>
+      <div class="spot" id="spotWrap" hidden><div id="spot"></div></div>
+      <a href="https://open.spotify.com/track/22NHkFYbgxB2Zirj29Gbp8" target="_blank" rel="noopener">เปิดใน Spotify ↗</a>
     </div>
   </div>
 
@@ -505,34 +506,37 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
     el.addEventListener('pointermove', move); el.addEventListener('pointerup', up, { once: true }); el.addEventListener('pointercancel', up, { once: true });
   }));
 
-  // ---------- Record player: Oh Yeah? — Steve Lacy ----------
-  const audio = document.getElementById('audio'), playBtn = document.getElementById('play'), player = document.getElementById('player');
+  // ---------- Record player: oh yeah? — Steve Lacy (Spotify iFrame API) ----------
+  // Without a Spotify login in this browser, Spotify plays a 30-second preview; logged in, the full song.
+  const playBtn = document.getElementById('play'), player = document.getElementById('player');
   const note = document.getElementById('note'), prog = document.getElementById('prog'), bar = document.getElementById('bar'), time = document.getElementById('time');
-  const fmt = s => isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}` : '–:––';
+  const fmt = ms => isFinite(ms) && ms > 0 ? `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000 % 60)).padStart(2, '0')}` : '–:––';
   const setPlaying = on => { player.classList.toggle('on', on); playBtn.textContent = on ? '❚❚ พัก' : '▶ เล่น'; playBtn.setAttribute('aria-pressed', on); };
-  let objectUrl = null;
-  document.getElementById('song').addEventListener('change', e => {
-    const f = e.target.files[0]; if (!f) return;
-    if (objectUrl) URL.revokeObjectURL(objectUrl);
-    objectUrl = URL.createObjectURL(f); audio.src = objectUrl; note.textContent = '';
-    audio.play().catch(err => { note.textContent = 'เล่นไฟล์นี้ไม่ได้ ลองไฟล์ .mp3 หรือ .m4a'; setPlaying(false); });
-  });
-  playBtn.addEventListener('click', () => {
-    if (!audio.src) { note.textContent = 'ยังไม่มีไฟล์เพลง กด "เลือกไฟล์เพลง" แล้วเลือก Oh Yeah? ในเครื่อง หรือฟังบน Spotify'; return; }
-    if (audio.paused) audio.play().catch(() => { note.textContent = 'เบราว์เซอร์ไม่ยอมเล่นเพลงนี้'; }); else audio.pause();
-  });
-  audio.addEventListener('play', () => setPlaying(true));
-  audio.addEventListener('pause', () => setPlaying(false));
-  audio.addEventListener('ended', () => setPlaying(false));
-  audio.addEventListener('error', () => { note.textContent = 'เปิดไฟล์เพลงไม่ได้ ลองไฟล์ .mp3 หรือ .m4a'; setPlaying(false); });
-  audio.addEventListener('timeupdate', () => { const p = audio.duration ? audio.currentTime / audio.duration * 100 : 0;
-    prog.style.width = p + '%'; bar.setAttribute('aria-valuenow', Math.round(p)); time.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`; });
-  audio.addEventListener('loadedmetadata', () => { time.textContent = `0:00 / ${fmt(audio.duration)}`; });
-  bar.addEventListener('pointerdown', e => { if (!audio.duration) return; const r = bar.getBoundingClientRect();
-    audio.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * audio.duration; });
-  bar.addEventListener('keydown', e => { if (!audio.duration) return;
-    if (e.key === 'ArrowRight') audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
-    if (e.key === 'ArrowLeft') audio.currentTime = Math.max(0, audio.currentTime - 5); });
+  let spotify = null, loading = false, dur = 0, songPos = 0;
+  function loadSpotify() {
+    loading = true; note.textContent = 'กำลังโหลด Spotify…';
+    window.onSpotifyIframeApiReady = api => {
+      document.getElementById('spotWrap').hidden = false;
+      api.createController(document.getElementById('spot'), { uri: 'spotify:track:22NHkFYbgxB2Zirj29Gbp8', width: '100%', height: 80 }, c => {
+        spotify = c;
+        // Spotify makes the iframe loading="lazy"; inside the transformed desk it never counts as visible, so it never loads.
+        const frame = document.querySelector('#spotWrap iframe'); if (frame) frame.loading = 'eager';
+        c.addListener('ready', () => { note.textContent = ''; c.play();
+          setTimeout(() => { if (!player.classList.contains('on')) note.textContent = 'ถ้าเพลงยังไม่เล่น กดปุ่มเล่นในกล่อง Spotify'; }, 2500); });
+        c.addListener('playback_update', e => { const d = e.data; dur = d.duration; songPos = d.position;
+          setPlaying(!d.isPaused); if (!d.isPaused) note.textContent = '';
+          const p = dur ? songPos / dur * 100 : 0; prog.style.width = p + '%'; bar.setAttribute('aria-valuenow', Math.round(p));
+          time.textContent = `${fmt(songPos)} / ${fmt(dur)}`; });
+      });
+    };
+    const s = document.createElement('script'); s.src = 'https://open.spotify.com/embed/iframe-api/v1'; s.async = true;
+    s.onerror = () => { loading = false; note.textContent = 'โหลด Spotify ไม่ได้ ลองกด "เปิดใน Spotify"'; };
+    document.head.appendChild(s);
+  }
+  playBtn.addEventListener('click', () => { if (spotify) spotify.togglePlay(); else if (!loading) loadSpotify(); });
+  const seekTo = ms => { if (spotify && dur) spotify.seek(Math.max(0, Math.min(dur, ms)) / 1000); };
+  bar.addEventListener('pointerdown', e => { const r = bar.getBoundingClientRect(); seekTo((e.clientX - r.left) / r.width * dur); });
+  bar.addEventListener('keydown', e => { if (e.key === 'ArrowRight') seekTo(songPos + 5000); if (e.key === 'ArrowLeft') seekTo(songPos - 5000); });
 
   // ---------- Paint: draw on the desk ----------
   const cv = document.getElementById('paint'), ctx = cv.getContext('2d');

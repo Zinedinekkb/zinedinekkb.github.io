@@ -198,7 +198,8 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
 .cert-stack:hover .stack img:nth-child(1){rotate:-10deg;translate:-8px 0}
 .cert-stack:hover .stack img:nth-child(2){rotate:7deg;translate:10px 0}
 .cert-stack b,.cert-stack div>span{display:block;margin-bottom:4px}
-.cert-stack ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:2px}
+.cert-stack ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:2px 22px}
+@media (min-width:760px){.cert-stack ul:has(li:nth-child(7)){grid-template-columns:repeat(2,minmax(0,1fr))}}
 .cert-stack li button{font:inherit;font-size:13px;text-align:left;color:var(--ink-2);background:none;border:0;padding:4px 0;cursor:zoom-in}
 .cert-stack li button::before{content:"✎ ";color:var(--pop)}
 .cert-stack li button:hover{color:var(--pop);text-decoration:underline}
@@ -484,7 +485,7 @@ h2.scrib.in path{stroke-dashoffset:0}
   <!-- certificates: images rendered from the creator's PDFs in D:\Cerlificate (certs/<id>.jpg full, <id>-s.jpg thumbnail) -->
   <section class="certs" id="certificates">
     <h2>Certificates ✧</h2>
-    <p class="cert-lead">ใบรับรองทั้งหมด 14 ใบ กดที่ใบไหนก็ได้เพื่อดูเต็ม ๆ</p>
+    <p class="cert-lead">ใบรับรองทั้งหมด 34 ใบ กดที่ใบไหนก็ได้เพื่อดูเต็ม ๆ</p>
 
     <div class="cert-group">
       <h3>AI &amp; Google</h3>
@@ -493,18 +494,61 @@ h2.scrib.in path{stroke-dashoffset:0}
           <b>Gemini Certified Educator</b><span>Google for Education · 17 ต.ค. 2568 (ใช้ได้ถึง ต.ค. 2571)</span></button>
         <button type="button" class="cert" data-full="certs/gemini-student.jpg"><span class="pic"><img src="certs/gemini-student-s.jpg" alt="ใบรับรอง Gemini Certified Student (University)" loading="lazy" width="360" height="279"></span>
           <b>Gemini Certified Student (University)</b><span>Google for Education · 17 ต.ค. 2568 (ใช้ได้ถึง ต.ค. 2571)</span></button>
+        <button type="button" class="cert" data-full="certs/google-genai.jpg"><span class="pic"><img src="certs/google-genai-s.jpg" alt="Completion badge Introduction to Generative AI จาก Google Cloud" loading="lazy" width="360" height="289"></span>
+          <b>Introduction to Generative AI (Completion Badge)</b><span>Google Cloud Skills Boost · 28 ต.ค. 2569</span></button>
         <div class="cert cert-stack">
-          <span class="pic stack" aria-hidden="true"><img src="certs/ai-guide-s.jpg" alt="" loading="lazy"><img src="certs/ai-mcp-s.jpg" alt="" loading="lazy"><img src="certs/ai-daily-s.jpg" alt="" loading="lazy"></span>
-          <div><b>บทเรียน AI 6 วิชา (TH AI Passport)</b><span>สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27 ต.ค. 2569</span>
+          <span class="pic stack" aria-hidden="true"><img src="certs/ai-smart-s.jpg" alt="" loading="lazy"><img src="certs/ai-agent-s.jpg" alt="" loading="lazy"><img src="certs/ai-chatgpt-s.jpg" alt="" loading="lazy"></span>
+          <div><b>บทเรียน AI 16 วิชา (TH AI Passport)</b><span>สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span>
             <ul>
-              <li><button type="button" data-full="certs/ai-daily.jpg">เพิ่มประสิทธิภาพงานประจำวันด้วย AI</button></li>
-              <li><button type="button" data-full="certs/ai-how.jpg">AI เรียนรู้อย่างไร? เปิดเผยเบื้องหลังแบบเข้าใจง่าย</button></li>
-              <li><button type="button" data-full="certs/ai-guide.jpg">คู่มือสร้างทักษะการใช้ AI อย่างเป็นระบบ</button></li>
-              <li><button type="button" data-full="certs/ai-mcp.jpg">แก้ปมโค้ดตกรุ่นและปัญหา Syntax เก่า ด้วย MCP และ Context7</button></li>
-              <li><button type="button" data-full="certs/ai-check.jpg">การตรวจสอบและปรับปรุงผลลัพธ์จาก AI</button></li>
+              <li><button type="button" data-full="certs/ai-smart.jpg">ทำงานให้ smart กว่าเดิมด้วย AI</button></li>
+              <li><button type="button" data-full="certs/ai-canva.jpg">ทำคอนเทนต์ให้ปังด้วย Canva</button></li>
+              <li><button type="button" data-full="certs/ai-canva-teach.jpg">แพลนการสอนได้ง่ายขึ้นกว่าเดิมด้วย Canva AI</button></li>
+              <li><button type="button" data-full="certs/ai-genai-basic.jpg">เทคนิคการใช้ Gen AI สำหรับมือใหม่</button></li>
+              <li><button type="button" data-full="certs/ai-delivery.jpg">AI เพื่อการส่งมอบและดูแลระบบซอฟต์แวร์ (AI for Software Delivery)</button></li>
+              <li><button type="button" data-full="certs/ai-leader.jpg">ผู้นำยุค AI: พร้อมสร้างความเชื่อมั่นในองค์กร</button></li>
+              <li><button type="button" data-full="certs/ai-chatgpt.jpg">ปลดล็อก ChatGPT ขั้นสูง</button></li>
+              <li><button type="button" data-full="certs/ai-agent.jpg">AI Agent การสร้างผู้ช่วยอัจฉริยะเพื่อการทำงาน</button></li>
+              <li><button type="button" data-full="certs/ai-change.jpg">การบริหารสู่องค์กรที่พร้อมเปลี่ยนแปลงด้วย AI</button></li>
+              <li><button type="button" data-full="certs/ai-customgpt.jpg">ออกแบบผู้ช่วย AI (Custom GPT) ภายในหน่วยงาน</button></li>
               <li><button type="button" data-full="certs/ai-context.jpg">การบริหาร Context window เพื่อใช้ AI อย่างคุ้มค่า</button></li>
+              <li><button type="button" data-full="certs/ai-check.jpg">การตรวจสอบและปรับปรุงผลลัพธ์จาก AI</button></li>
+              <li><button type="button" data-full="certs/ai-mcp.jpg">แก้ปมโค้ดตกรุ่นและปัญหา Syntax เก่า ด้วย MCP และ Context7</button></li>
+              <li><button type="button" data-full="certs/ai-guide.jpg">คู่มือสร้างทักษะการใช้ AI อย่างเป็นระบบ</button></li>
+              <li><button type="button" data-full="certs/ai-how.jpg">AI เรียนรู้อย่างไร? เปิดเผยเบื้องหลังแบบเข้าใจง่าย</button></li>
+              <li><button type="button" data-full="certs/ai-daily.jpg">เพิ่มประสิทธิภาพงานประจำวันด้วย AI</button></li>
             </ul></div>
         </div>
+      </div>
+    </div>
+
+    <div class="cert-group">
+      <h3>เขียนโค้ด &amp; ระบบอัตโนมัติ</h3>
+      <div class="cert-grid">
+        <div class="cert cert-stack">
+          <span class="pic stack" aria-hidden="true"><img src="certs/fcc-backend-s.jpg" alt="" loading="lazy"><img src="certs/fcc-frontend-s.jpg" alt="" loading="lazy"><img src="certs/fcc-dataviz-s.jpg" alt="" loading="lazy"></span>
+          <div><b>freeCodeCamp Developer Certification 5 ใบ</b><span>freeCodeCamp.org · 28 ต.ค. 2569 · ใบละประมาณ 300 ชั่วโมง</span>
+            <ul>
+              <li><button type="button" data-full="certs/fcc-frontend.jpg">Front-End Development Libraries V8</button></li>
+              <li><button type="button" data-full="certs/fcc-backend.jpg">Back-End Development and APIs V8</button></li>
+              <li><button type="button" data-full="certs/fcc-dataviz.jpg">Data Visualization V8</button></li>
+              <li><button type="button" data-full="certs/fcc-qa.jpg">Quality Assurance</button></li>
+              <li><button type="button" data-full="certs/fcc-infosec.jpg">Information Security</button></li>
+            </ul></div>
+        </div>
+        <button type="button" class="cert" data-full="certs/n8n-essentials.jpg"><span class="pic"><img src="certs/n8n-essentials-s.jpg" alt="ใบรับรอง n8n Essentials: Your First Workflows" loading="lazy" width="360" height="238"></span>
+          <b>n8n Essentials: Your First Workflows (N8N101)</b><span>n8n Academy · 28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/n8n-integrations.jpg"><span class="pic"><img src="certs/n8n-integrations-s.jpg" alt="ใบรับรอง n8n Integrations: APIs &amp; Connected Workflows" loading="lazy" width="360" height="238"></span>
+          <b>n8n Integrations: APIs &amp; Connected Workflows (N8N102)</b><span>n8n Academy · 28 ต.ค. 2569</span></button>
+      </div>
+    </div>
+
+    <div class="cert-group">
+      <h3>การตลาด &amp; ข้อมูล</h3>
+      <div class="cert-grid">
+        <button type="button" class="cert" data-full="certs/google-analytics.jpg"><span class="pic"><img src="certs/google-analytics-s.jpg" alt="Google Analytics Certification (2026) จาก Google Skillshop" loading="lazy" width="360" height="219"></span>
+          <b>Google Analytics Certification (2026)</b><span>Google Skillshop · 28 ต.ค. 2569 (ใช้ได้ถึง ต.ค. 2570)</span></button>
+        <button type="button" class="cert" data-full="certs/hubspot-social.jpg"><span class="pic"><img src="certs/hubspot-social-s.jpg" alt="ใบรับรอง HubSpot Academy Social Media Certified" loading="lazy" width="360" height="278"></span>
+          <b>Social Media Marketing Certified</b><span>HubSpot Academy · 28 ต.ค. 2569 (ใช้ได้ถึง 26 พ.ย. 2571)</span></button>
       </div>
     </div>
 

@@ -206,6 +206,20 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
 @media (max-width:560px){.cert-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cert{padding:12px 10px 10px}.cert b{font-size:12px}
   .cert-stack{flex-direction:column}.cert-stack .stack{width:100%;max-width:240px;height:auto;aspect-ratio:4/3}}
 .viewer{border:0;padding:0;background:none;max-width:min(94vw,1100px);max-height:92vh;overflow:visible}
+/* live demo: a small app window in the middle of the page */
+.app-win{border:0;padding:0;background:none;width:min(94vw,1040px);max-width:none;max-height:none;overflow:visible}
+.app-win::backdrop{background:rgba(40,30,20,.55);backdrop-filter:blur(2px)}
+.app-win .frame{display:flex;flex-direction:column;height:min(82vh,700px);background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.app-win .bar{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--card);border-bottom:1px solid var(--line);font:500 12px var(--mono);color:var(--ink-3)}
+.app-win .dots{display:flex;gap:6px}.app-win .dots i{width:11px;height:11px;border-radius:50%;background:#E5DDD3}.app-win .dots i:first-child{background:var(--pop)}
+.app-win .bar span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.app-win .bar button{border:0;background:none;font:500 13px var(--mono);color:var(--ink);cursor:pointer;padding:2px 6px;border-radius:6px}
+.app-win .bar button:hover{background:var(--line)}
+.app-win iframe{flex:1;width:100%;border:0;background:#fff}
+.app-win .under{display:flex;justify-content:space-between;gap:12px;margin-top:10px;font:400 11px var(--mono);color:#fff;opacity:.85}
+.app-win .under a{color:#fff}
+html:has(.app-win[open]){overflow:hidden}
+@media (max-width:560px){.app-win{width:96vw}.app-win .frame{height:80vh}}
 .viewer::backdrop{background:rgba(40,30,20,.6)}
 .viewer img{display:block;max-width:100%;max-height:82vh;width:auto;height:auto;border-radius:8px;box-shadow:0 20px 50px rgba(0,0,0,.35);background:#fff}
 .viewer form{text-align:center;margin-top:12px}
@@ -422,7 +436,7 @@ h2.scrib.in path{stroke-dashoffset:0}
         <div><h3>คลังเหล็ก — ระบบสต็อก ขาย และการเงินร้านค้าเหล็ก</h3><p class="meta">งานลูกค้า · ร้านค้าเหล็กในภาคตะวันออก · ใช้งานจริง | 2026</p><hr>
           <p>เว็บแอปที่ร้านใช้ทุกวันบนมือถือ: สต็อกเป็นเส้น/แผ่น/กิโล วางแผนตัดเหล็กจากท่อนเหลือ ซื้อเข้าและคิดทุนเฉลี่ย ออกใบเสนอราคา ใบเสร็จ ใบส่งของขายเชื่อพร้อม QR พร้อมเพย์ ติดตามลูกหนี้ สรุปกำไรและแผนเงินสด ให้ AI อ่านบิลซื้อเข้า แยกสิทธิ์เจ้าของกับลูกน้องถึงระดับฐานข้อมูล</p>
           <p class="meta">Vite · JavaScript · Firebase · Vercel · Claude API · มีเทสต์ทุกจุดที่แตะเงินและสต็อก</p>
-          <a class="try" href="demo/khlang-lek/">ลองเล่นเดโม ↗</a></div>
+          <a class="try" href="demo/khlang-lek/" data-app="demo/khlang-lek/" data-title="คลังเหล็ก · เดโม (ร้านและข้อมูลตัวอย่าง)">ลองเล่นเดโม</a></div>
       </article>
       <article class="work">
         <div class="thumb" style="background:linear-gradient(160deg,#FCE7C8,#F7D74A)"></div>
@@ -576,6 +590,12 @@ h2.scrib.in path{stroke-dashoffset:0}
       </div>
     </div>
 
+    <dialog class="app-win" id="appWin" aria-label="เดโมเว็บแอป">
+      <div class="frame"><div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span id="appTitle"></span>
+        <form method="dialog"><button type="submit" aria-label="ปิดเดโม">ปิด ✕</button></form></div>
+        <iframe id="appFrame" title="เดโมเว็บแอป"></iframe></div>
+      <p class="under"><span>เล่นได้จริงทุกปุ่ม · ข้อมูลเก็บในเบราว์เซอร์นี้เท่านั้น</span><a id="appFull" href="#" target="_blank" rel="noopener">เปิดเต็มหน้า ↗</a></p>
+    </dialog>
     <dialog class="viewer" id="viewer" aria-label="ดูใบรับรอง">
       <img id="viewerImg" alt="">
       <form method="dialog"><button type="submit">ปิด ✕</button></form>
@@ -867,6 +887,17 @@ h2.scrib.in path{stroke-dashoffset:0}
   document.querySelectorAll('#certificates [data-full]').forEach(b => b.addEventListener('click', () => {
     viewerImg.src = b.dataset.full; viewerImg.alt = (b.querySelector('b') || b).textContent.trim(); viewer.showModal(); }));
   viewer.addEventListener('click', e => { if (e.target === viewer) viewer.close(); });
+
+  // Live demos open in a small window on this page; the link under it opens the full page.
+  const appWin = document.getElementById('appWin'), appFrame = document.getElementById('appFrame');
+  document.querySelectorAll('[data-app]').forEach(a => a.addEventListener('click', e => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+    e.preventDefault();
+    if (appFrame.dataset.src !== a.dataset.app) { appFrame.src = a.dataset.app; appFrame.dataset.src = a.dataset.app; }
+    document.getElementById('appTitle').textContent = a.dataset.title || '';
+    document.getElementById('appFull').href = a.dataset.app;
+    appWin.showModal(); }));
+  appWin.addEventListener('click', e => { if (e.target === appWin) appWin.close(); });
 
   fit(); setMode('chaos', true);
 })();

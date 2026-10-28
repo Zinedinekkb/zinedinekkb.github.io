@@ -1,0 +1,8 @@
+1:"$Sreact.fragment"
+2:I[28029,[],"ViewportBoundary"]
+4:I[28029,[],"MetadataBoundary"]
+5:"$Sreact.suspense"
+7:I[49256,[],"IconMark"]
+0:{"buildId":"TZxZGGZYQoxttu6kvjHr-","rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":"$@3"}],["$","div",null,{"hidden":true,"children":["$","$L4",null,{"children":["$","$5",null,{"name":"Next.Metadata","children":"$@6"}]}]}],null]}],"loading":null,"isPartial":false}
+3:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+6:[["$","title","0",{"children":"StockPro — ระบบจัดการสต็อกและบุคลากร"}],["$","meta","1",{"name":"description","content":"ระบบจัดการคลังสินค้าและบุคลากรสำหรับทุกธุรกิจ"}],["$","link","2",{"rel":"icon","href":"/demo/stock-jin/favicon.ico?603d046c9a6fdfbb","type":"image/x-icon","sizes":"16x16"}],["$","$L7","3",{}]]

@@ -252,6 +252,36 @@ h2.scrib.in path{stroke-dashoffset:0}
 .cta button{font:500 13px var(--mono);border:0;border-radius:10px;padding:11px 16px;background:var(--you);color:#fff;cursor:pointer}
 .cta button:hover{background:var(--pop)}
 .small{font-size:12px;color:var(--ink-3);margin:12px 0 0}
+.cta a.send{font:500 13px var(--mono);border-radius:10px;padding:11px 16px;background:var(--pop);color:#fff;text-decoration:none}
+.cta a.send:hover{background:var(--you)}
+
+/* quick menu: slides in once the desk is scrolled past, so any section (and the contact) is one tap away */
+.jump{position:fixed;z-index:3000;top:max(10px,env(safe-area-inset-top,0px));left:50%;translate:-50% -140%;transition:translate .3s;
+  display:flex;align-items:center;gap:2px;max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none;padding:5px;
+  background:rgba(255,250,245,.92);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:999px;box-shadow:0 6px 20px rgba(40,30,20,.1)}
+.jump::-webkit-scrollbar{display:none}
+.jump.on{translate:-50% 0}
+.jump a{flex:none;font:500 12px var(--mono);color:var(--ink-2);text-decoration:none;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.jump a:hover{background:var(--chip)}
+.jump a[aria-current="true"]{background:var(--chip);color:var(--ink)}
+.jump a.hire{background:var(--you);color:#fff}
+.jump a.hire:hover{background:var(--pop)}
+.jump .me{font:400 20px/1 var(--script);color:var(--ink);padding:4px 10px 2px}
+@media (max-width:560px){.jump .me,.jump .wide{display:none}.jump a{padding:7px 9px}}
+@media (prefers-reduced-motion:reduce){.jump{transition:none}}
+main section[id]{scroll-margin-top:70px}
+
+/* first screen: two plain ways out of the desk */
+.title .go{display:flex;gap:8px;justify-content:center;margin-top:18px;pointer-events:auto}
+.title .go a{font:500 13px var(--mono);text-decoration:none;padding:9px 16px;border-radius:999px;border:1px solid var(--ink);color:var(--ink);background:var(--paper)}
+.title .go a.main{background:var(--you);border-color:var(--you);color:#fff}
+.title .go a:hover{background:var(--pop);border-color:var(--pop);color:#fff}
+
+/* certificates: the first groups, then the rest on demand */
+.certs.short .cert-group:nth-of-type(n+3){display:none}
+.more-certs{font:500 13px var(--mono);border:1px solid var(--ink);border-radius:999px;padding:9px 18px;background:var(--paper);color:var(--ink);cursor:pointer}
+.more-certs:hover{background:var(--you);color:#fff}
+.cooking a.open{color:var(--pop);font-weight:500}
 
 .about p{max-width:64ch;line-height:1.6;margin:0 0 14px;font-size:15px}
 .about footer{margin-top:28px;font-size:12px;display:flex;flex-wrap:wrap;gap:6px 10px}
@@ -387,6 +417,7 @@ h2.scrib.in path{stroke-dashoffset:0}
     <p class="role">Content Creator · Vibe Coder</p>
     <p class="pos">verb &amp; noun</p>
     <p class="tag">ทำคอนเทนต์การเงิน/ภาษี และสร้างระบบหลังบ้านให้ร้านค้า</p>
+    <p class="go"><a class="main" href="#recent">ดูผลงาน ↓</a><a href="#work-with-me">ติดต่องาน ✉</a></p>
   </div>
 
   <div class="menu" role="toolbar" aria-label="จัดโต๊ะ">
@@ -400,12 +431,17 @@ h2.scrib.in path{stroke-dashoffset:0}
 </section>
 
 <!-- ============ CONTENT ============ -->
+<nav class="jump" id="jump" aria-label="ไปที่ส่วนต่าง ๆ">
+  <a class="me" href="#desk" aria-label="กลับขึ้นบนสุด">Zine</a>
+  <a href="#recent">ผลงาน</a><a class="wide" href="#others">งานอื่น</a><a href="#experience">ประสบการณ์</a><a href="#certificates">ใบรับรอง</a><a class="wide" href="#about">เกี่ยวกับ</a>
+  <a class="hire" href="#work-with-me">ติดต่องาน ✉</a>
+</nav>
 <main>
   <section class="cooking">
     <h2>Currently cooking ☺︎</h2>
     <p>กำลังทำของใหม่ชื่อ <span class="inline-app"><i>✎</i><b>Content Studio</b></span> ,</p>
     <p>แอปในเครื่องที่ช่วยคิดไอเดีย เขียนบท ตรวจข้อมูลภาษี และตัดคลิป TikTok ให้ทำคลิปได้โดยไม่หมดไฟ</p>
-    <p>เดี๋ยวมาเล่าเบื้องหลังในช่องครับ ✎</p>
+    <p>ใช้ทำคลิปจริงแล้ว <a class="open" href="demo/content-studio/" data-app="demo/content-studio/" data-title="Content Studio · เดโม (โปรเจกต์จริงของช่อง ดูอย่างเดียว)" data-note="ดูได้ทุกหน้าและทุกขั้น · ปุ่มบันทึก สั่ง AI และเรนเดอร์ปิดไว้ในเดโม">ลองเปิดดูแอปตัวจริง ↗</a> ✎</p>
   </section>
 
   <section class="recent" id="recent">
@@ -497,21 +533,9 @@ h2.scrib.in path{stroke-dashoffset:0}
   </section>
 
   <!-- certificates: images rendered from the creator's PDFs in D:\Cerlificate (certs/<id>.jpg full, <id>-s.jpg thumbnail) -->
-  <section class="certs" id="certificates">
+  <section class="certs short" id="certificates">
     <h2>Certificates ✧</h2>
     <p class="cert-lead">ใบรับรองทั้งหมด 41 ใบ กดที่ใบไหนก็ได้เพื่อดูเต็ม ๆ</p>
-
-    <div class="cert-group">
-      <h3>การศึกษา &amp; กิจกรรม</h3>
-      <div class="cert-grid">
-        <button type="button" class="cert" data-full="certs/nfe-ict.jpg"><span class="pic"><img src="certs/nfe-ict-s.jpg" alt="เกียรติบัตรการพัฒนาความรู้ความสามารถด้านการใช้เทคโนโลยีสารสนเทศ (ICT) จาก กศน.อำเภอเมืองจันทบุรี" loading="lazy" width="360" height="255"></span>
-          <b>อบรมการใช้เทคโนโลยีสารสนเทศ (ICT) พัฒนาทักษะการเรียนรู้สู่ดิจิทัล</b><span>กศน.อำเภอเมืองจันทบุรี · 1 ก.ย. 2564 · ผ่านเกณฑ์ 73%</span></button>
-        <button type="button" class="cert" data-full="certs/nfe-history.jpg"><span class="pic"><img src="certs/nfe-history-s.jpg" alt="เกียรติบัตรโครงการอบรมประวัติศาสตร์ชาติไทย จาก กศน.อำเภอเมืองจันทบุรี" loading="lazy" width="360" height="255"></span>
-          <b>อบรมประวัติศาสตร์ชาติไทยและบุญคุณของพระมหากษัตริย์</b><span>กศน.อำเภอเมืองจันทบุรี · 5 ก.ค. 2564 · ผ่านเกณฑ์ 90%</span></button>
-        <button type="button" class="cert" data-full="certs/nfe-volunteer.jpg"><span class="pic"><img src="certs/nfe-volunteer-s.jpg" alt="เกียรติบัตรโครงการจิตอาสาพัฒนา จาก กศน.อำเภอเมืองจันทบุรี" loading="lazy" width="360" height="255"></span>
-          <b>จิตอาสาพัฒนา การบำเพ็ญประโยชน์ต่อส่วนรวม</b><span>กศน.อำเภอเมืองจันทบุรี · 14 ก.ค. 2564</span></button>
-      </div>
-    </div>
 
     <div class="cert-group">
       <h3>Anthropic &amp; Claude AI</h3>
@@ -622,6 +646,19 @@ h2.scrib.in path{stroke-dashoffset:0}
         <iframe id="appFrame" title="เดโมเว็บแอป"></iframe></div>
       <p class="under"><span id="appNote"></span><a id="appFull" href="#" target="_blank" rel="noopener">เปิดเต็มหน้า ↗</a></p>
     </dialog>
+    <div class="cert-group">
+      <h3>การศึกษา &amp; กิจกรรม</h3>
+      <div class="cert-grid">
+        <button type="button" class="cert" data-full="certs/nfe-ict.jpg"><span class="pic"><img src="certs/nfe-ict-s.jpg" alt="เกียรติบัตรการพัฒนาความรู้ความสามารถด้านการใช้เทคโนโลยีสารสนเทศ (ICT) จาก กศน.อำเภอเมืองจันทบุรี" loading="lazy" width="360" height="255"></span>
+          <b>อบรมการใช้เทคโนโลยีสารสนเทศ (ICT) พัฒนาทักษะการเรียนรู้สู่ดิจิทัล</b><span>กศน.อำเภอเมืองจันทบุรี · 1 ก.ย. 2564 · ผ่านเกณฑ์ 73%</span></button>
+        <button type="button" class="cert" data-full="certs/nfe-history.jpg"><span class="pic"><img src="certs/nfe-history-s.jpg" alt="เกียรติบัตรโครงการอบรมประวัติศาสตร์ชาติไทย จาก กศน.อำเภอเมืองจันทบุรี" loading="lazy" width="360" height="255"></span>
+          <b>อบรมประวัติศาสตร์ชาติไทยและบุญคุณของพระมหากษัตริย์</b><span>กศน.อำเภอเมืองจันทบุรี · 5 ก.ค. 2564 · ผ่านเกณฑ์ 90%</span></button>
+        <button type="button" class="cert" data-full="certs/nfe-volunteer.jpg"><span class="pic"><img src="certs/nfe-volunteer-s.jpg" alt="เกียรติบัตรโครงการจิตอาสาพัฒนา จาก กศน.อำเภอเมืองจันทบุรี" loading="lazy" width="360" height="255"></span>
+          <b>จิตอาสาพัฒนา การบำเพ็ญประโยชน์ต่อส่วนรวม</b><span>กศน.อำเภอเมืองจันทบุรี · 14 ก.ค. 2564</span></button>
+      </div>
+    </div>
+
+    <p><button type="button" class="more-certs" id="moreCerts">ดูใบรับรองทั้งหมด 41 ใบ ▾</button></p>
     <dialog class="viewer" id="viewer" aria-label="ดูใบรับรอง">
       <img id="viewerImg" alt="">
       <form method="dialog"><button type="submit">ปิด ✕</button></form>
@@ -643,12 +680,13 @@ h2.scrib.in path{stroke-dashoffset:0}
     </ul>
     <div class="cta">
       <code id="mail">zinedinekkb@gmail.com</code>
+      <a class="send" href="mailto:zinedinekkb@gmail.com?subject=%E0%B8%95%E0%B8%B4%E0%B8%94%E0%B8%95%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%B2%E0%B8%99">ส่งอีเมล ✉</a>
       <button type="button" id="copyMail">คัดลอกอีเมล</button>
     </div>
     <p class="small">ตัวเลขจากหน้าโปรไฟล์ TikTok และ Instagram เดือนตุลาคม 2026</p>
   </section>
 
-  <section class="about">
+  <section class="about" id="about">
     <h2>About ⌘</h2>
     <p>ผมทำคลิปสั้นเรื่องภาษี การเงิน การตลาด และ vibe coding สำหรับคน Gen Z และผู้ประกอบการรุ่นใหม่</p>
     <p>ทำงานจริงมาตั้งแต่ก่อนเข้ามหาลัย ทั้งเป็น Butcher 2–3 ปี และลุยงานร้านจินข้าวมันไก่สไตล์สิงคโปร์อีกเกือบ 4 ปี ก่อนจะมาต่อยอดในสายการจัดการ คอมพิวเตอร์ธุรกิจ (ว่าที่เกียรตินิยมอันดับ 1)</p>
@@ -686,18 +724,21 @@ h2.scrib.in path{stroke-dashoffset:0}
   const toast = msg => { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on');
     clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 1600); };
 
-  // The toolbox is kept fully inside the window, so it follows you down the page and can always be reached
-  // (its saved spot becomes where it is shown); everything else may hang off the edge.
+  // While a drawing tool is picked, the toolbox is kept fully inside the window, so it follows you down the page and can
+  // always be reached (its saved spot becomes where it is shown); with the move tool it stays on the desk and keeps out
+  // of the way of the sections. Everything else may hang off the edge.
   const tools = objs.find(el => el.dataset.id === 'tools');
   const place = el => { const s = state[el.dataset.id], w = desk.clientWidth, h = desk.clientHeight;
     let x = s.x * w / 100, y = s.y * h / 100;
-    if (el === tools) { const view = scrollY - desk.offsetTop;
+    if (el === tools && desk.classList.contains('drawing')) { const view = scrollY - desk.offsetTop;
       x = Math.max(8, Math.min(x, w - el.offsetWidth - 8)); y = Math.max(view + 24, Math.min(y, view + innerHeight - el.offsetHeight - 16));
       s.x = x / w * 100; s.y = y / h * 100; }
     el.style.transform = `translate(${x}px, ${y}px) rotate(${s.r}deg)`; };
 
   function setMode(m, quiet) {
-    objs.forEach(el => { const [x, y, r] = P[m][el.dataset.id]; state[el.dataset.id] = { x, y, r };
+    // On narrow desks the name, tagline and buttons fill the middle, so the toolbox starts below them.
+    const narrow = desk.clientWidth < 600;
+    objs.forEach(el => { const [x, y0, r] = P[m][el.dataset.id], y = narrow && el === tools ? Math.max(y0, 70) : y0; state[el.dataset.id] = { x, y, r };
       el.classList.toggle('gone', !!hiddenIn[m]?.has(el.dataset.id)); place(el); });
     document.querySelectorAll('.menu button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === m));
     if (!quiet) toast(toastText[m]);
@@ -925,6 +966,20 @@ h2.scrib.in path{stroke-dashoffset:0}
     document.getElementById('appFull').href = a.dataset.app;
     appWin.showModal(); }));
   appWin.addEventListener('click', e => { if (e.target === appWin) appWin.close(); });
+
+  // Quick menu: shown once the desk is mostly scrolled past; marks the section on screen.
+  const jump = document.getElementById('jump'), deskEl = document.getElementById('desk');
+  new IntersectionObserver(([en]) => jump.classList.toggle('on', !en.isIntersecting), { rootMargin: '-55% 0px 0px 0px' }).observe(deskEl);
+  const links = [...jump.querySelectorAll('a[href^="#"]:not(.me)')];
+  const onScreen = new IntersectionObserver(entries => entries.forEach(en => { if (!en.isIntersecting) return;
+    links.forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + en.target.id)); }), { rootMargin: '-45% 0px -50% 0px' });
+  links.forEach(a => { const sec = document.querySelector(a.getAttribute('href')); if (sec) onScreen.observe(sec); });
+
+  // Certificates start with the first two groups; the button (or any link into the list) opens the rest.
+  const certs = document.getElementById('certificates'), more = document.getElementById('moreCerts');
+  const openCerts = () => { certs.classList.remove('short'); more.parentElement.remove(); };
+  more.addEventListener('click', openCerts);
+  if (location.hash === '#certificates') openCerts();
 
   fit(); setMode('chaos', true);
 })();

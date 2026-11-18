@@ -450,6 +450,9 @@ main section[id]{scroll-margin-top:70px}
       <a class="row" href="demo/content-studio/" data-app="demo/content-studio/" data-title="Content Studio · เดโม (โปรเจกต์จริงของช่อง ดูอย่างเดียว)" data-note="ดูได้ทุกหน้าและทุกขั้น · ปุ่มบันทึก สั่ง AI และเรนเดอร์ปิดไว้ในเดโม" data-fan="studio">
         <span class="icon" style="background:#FFFAF5;border:1px solid var(--line)"><svg viewBox="0 0 40 40" width="38" aria-hidden="true"><rect x="5" y="9" width="30" height="22" rx="4" fill="#3E3E42"/><path d="M17 15v10l8-5Z" fill="#FFFAF5"/></svg></span>
         <div><h3>Content Studio</h3><p>สตูดิโอทำคลิป 5 โมดูลที่เขียนเองด้วย vibe coding · <u>กดเพื่อเปิดดูแอปจริง</u></p></div></a>
+      <a class="row" href="https://chan-creator.pages.dev" target="_blank" rel="noopener" data-fan="chan">
+        <span class="icon" style="background:#2a1230"><svg viewBox="0 0 40 40" width="38" aria-hidden="true"><path d="M4 31h32v5H4Z" fill="#0e6e6b"/><path d="M12 31V16l3-6 3 6v15Zm10 0V16l3-6 3 6v15Z" fill="#f4e9d8"/><path d="M18 31v-8h4v8Z" fill="#f4e9d8"/><path d="M20 4l4 4-4 5-4-5Z" fill="#c2183f"/></svg></span>
+        <div><h3>จันท์ครีเอเตอร์</h3><p>เว็บจัดอันดับอินฟลูเอนเซอร์จันทบุรี 1,191 ช่อง · อัปเดตยอดอัตโนมัติด้วย AI · <u>กดเพื่อเปิดเว็บจริง</u></p></div></a>
       <a class="row" href="https://www.tiktok.com/@sathapannuk" target="_blank" rel="noopener" data-fan="satha">
         <span class="icon" style="background:#2F6FE4"><span style="font:700 30px Arial,sans-serif;color:#fff">฿</span></span>
         <div><h3>SaThaPaNuk??</h3><p>สถาปนึก ไม่เน้นอยู่จริง เน้นทำคอนเทนต์ · 15.5K ผู้ติดตาม</p></div></a>
@@ -467,6 +470,13 @@ main section[id]{scroll-margin-top:70px}
   <section id="others">
     <h2>Other Work ⁕</h2>
     <div class="others">
+      <article class="work">
+        <div class="thumb"><img src="demo/chan-creator-thumb.jpg" alt="หน้าอันดับของเว็บจันท์ครีเอเตอร์บนมือถือ" width="240" height="277" style="width:100%;height:100%;object-fit:cover;object-position:top"></div>
+        <div><h3>จันท์ครีเอเตอร์ — อันดับอินฟลูเอนเซอร์จันทบุรี</h3><p class="meta">เว็บสาธารณะ · 1,191 ช่อง · ใช้งานจริง | 2026</p><hr>
+          <p>รวมครีเอเตอร์และเพจเมืองจันท์จาก TikTok, YouTube, Facebook, IG และ Lemon8 จัดอันดับตามยอดผู้ติดตาม แยกหมวดและอำเภอ ให้ AI (Gemini) เปิดหน้าจริงไปนับยอดทุก 3 วัน แล้วสคริปต์ตรวจก่อนลง ยอดที่กระโดดผิดปกติต้องให้คนตรวจ ล็อกอิน Google เพื่อเสนอช่องใหม่ได้ ทุกหน้ามีฉากแลนด์มาร์กเมืองจันท์ที่ดินสอวาดขึ้นมาตอนเปลี่ยนหน้า และมีมาสคอตกระต่ายพาเที่ยว</p>
+          <p class="meta">Vite · React · Cloudflare Pages + D1 · Gemini (agy) · ภาพวาดจาก GPT</p>
+          <a class="try" href="https://chan-creator.pages.dev" target="_blank" rel="noopener">เปิดเว็บจริง</a></div>
+      </article>
       <article class="work">
         <div class="thumb"><img src="demo/khlang-lek-thumb.jpg" alt="หน้าสต็อกของระบบคลังเหล็ก (ข้อมูลตัวอย่าง)" width="240" height="277" style="width:100%;height:100%;object-fit:cover;object-position:top"></div>
         <div><h3>คลังเหล็ก — ระบบสต็อก ขาย และการเงินร้านค้าเหล็ก</h3><p class="meta">งานลูกค้า · ร้านค้าเหล็กในภาคตะวันออก · ใช้งานจริง | 2026</p><hr>
@@ -903,6 +913,7 @@ main section[id]{scroll-margin-top:70px}
   const fanShots = [...fan.querySelectorAll('.scr')];
   const fanData = {
     studio: [['#3E3E42','คิดไอเดีย + ตารางโพสต์'],['#F76240','บท + ตรวจข้อมูลภาษี'],['#2F6FE4','ตัดต่อ + ซับไทย']],
+    chan:   [['#c2183f','ใครเป็นที่เท่าไหร่ในจันท์'],['#0e6e6b','ฉากแลนด์มาร์ก + ดินสอวาด'],['#5a2f66','ล็อกอิน Google + เพิ่มช่องเอง']],
     satha:  [['#2F6FE4','ภาษีเข้าใจใน 45 วิ'],['#F7D74A','มาสคอตสถาปนิก'],['#3E3E42','ระบบหลังบ้าน']],
     zine:   [['#111111','zinedine kubkrabee'],['#3BB273','SOP & POS ร้านอาหาร'],['#F76240','Vibe Coding & AI']]
   };

@@ -53,6 +53,19 @@ a{color:inherit}
 .title .role{margin:.3em 0 0;font-size:15px;color:var(--ink)}
 .title .pos{margin:.15em 0 .9em;font-size:11px;font-style:italic;color:var(--ink-3)}
 .title .tag{max-width:30ch;margin:0 auto;font-size:15px;line-height:1.5;color:var(--ink)}
+/* the name is the Ms Madi outline, signed in: each letter's outline is drawn, then filled */
+.title h1 .sig{display:block;height:.79em;width:auto;margin:.15em auto .16em;overflow:visible;color:var(--ink)}
+.sig path{fill:currentColor;stroke:currentColor;stroke-width:5;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0;stroke-opacity:0;
+  animation:sig-draw var(--t,.5s) cubic-bezier(.45,.05,.4,1) var(--d,0s) both,sig-fill .55s ease-out calc(var(--d,0s) + var(--t,.5s) - .1s) both}
+@keyframes sig-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes sig-fill{from{fill-opacity:0;stroke-opacity:1}to{fill-opacity:1;stroke-opacity:0}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* the lines under the name are typed in quickly (JS); the part not typed yet keeps its place */
+.title .left{visibility:hidden}
+.title .caret::after{content:"";display:inline-block;width:1px;height:1.05em;margin-left:1px;vertical-align:-.15em;background:currentColor;animation:caret .5s steps(1) infinite}
+@keyframes caret{50%{opacity:0}}
+.title .go{transition:opacity .4s,translate .4s}
+.title .go.wait{opacity:0;translate:0 6px}
 
 .menu{position:absolute;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;gap:10px;z-index:1002}
 .menu button{width:48px;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--paper);display:grid;place-items:center;cursor:pointer;transition:background .2s,transform .2s}
@@ -227,7 +240,7 @@ html:has(.app-win[open]){overflow:hidden}
 .skill-tags span{font-size:12px;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:5px 11px;border-radius:99px}
 
 /* work with me (for brands) */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;max-width:620px;margin:0 0 26px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,200px));gap:12px;max-width:620px;margin:0 0 26px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
 .stat b{display:block;font:600 26px/1.1 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
 .stat span{display:block;margin-top:6px;font-size:12px;color:var(--ink-3);line-height:1.35}
@@ -413,7 +426,7 @@ main section[id]{scroll-margin-top:70px}
   </div>
 
   <div class="title">
-    <h1>Zine</h1>
+    <h1><span class="sr">Zine</span><svg class="sig" viewBox="-69 -649 1795 785" aria-hidden="true"><path pathLength="1" style="--d:.0s;--t:.75s" d="M718 116Q649 116 588 102Q527 89 470 68Q414 46 357 22Q300 -2 238 -23Q195 2 146 22Q98 42 45 42Q23 42 1 36Q-21 30 -35 16Q-49 2 -49 -20Q-49 -43 -34 -60Q-18 -77 6 -86Q29 -95 53 -95Q73 -95 108 -88Q143 -80 178 -70Q213 -61 233 -55Q333 -116 421 -192Q509 -267 593 -343Q652 -396 714 -448Q775 -499 842 -543Q766 -563 689 -582Q612 -601 532 -601Q508 -601 484 -598Q461 -596 438 -591Q401 -582 369 -556Q337 -530 324 -498Q319 -483 319 -471Q319 -464 322 -456Q324 -449 324 -442Q324 -428 308 -428Q294 -428 290 -443Q286 -458 286 -467Q286 -488 292 -506Q300 -531 322 -554Q343 -578 372 -596Q401 -613 429 -620Q449 -625 470 -627Q492 -629 513 -629Q576 -629 634 -616Q693 -604 750 -588Q808 -571 867 -559Q887 -570 911 -581Q935 -592 959 -592Q968 -592 982 -590Q995 -587 1005 -582Q1015 -576 1015 -565Q1015 -552 1002 -544Q989 -535 972 -531Q956 -527 944 -527Q928 -527 912 -530Q896 -532 880 -535Q834 -509 788 -472Q743 -436 700 -398Q657 -359 618 -324Q536 -251 450 -178Q365 -105 271 -43Q346 -16 418 14Q489 44 564 66Q639 87 723 87Q759 87 798 81Q838 75 866 59Q878 51 884 46Q889 41 894 31Q897 26 900 22Q903 19 910 19Q917 20 922 24Q927 28 927 34Q927 48 912 62Q897 75 885 82Q852 101 806 108Q759 116 718 116ZM44 13Q87 13 126 -2Q164 -16 199 -35Q188 -38 168 -42Q147 -47 124 -52Q101 -58 81 -62Q61 -65 52 -65Q30 -65 7 -53Q-16 -41 -16 -18Q-16 1 6 7Q27 13 44 13Z"/><path pathLength="1" style="--d:.62s;--t:.3s" d="M894 -408Q889 -408 883 -410Q877 -412 877 -419Q877 -424 880 -428Q888 -443 910 -454Q931 -465 942 -465Q947 -465 953 -462Q959 -460 959 -453Q959 -436 938 -422Q918 -408 894 -408ZM782 1Q748 1 728 -18Q708 -37 708 -71Q708 -91 712 -110Q716 -130 723 -149Q727 -160 740 -186Q752 -211 769 -240Q786 -268 802 -288Q818 -308 830 -308Q835 -308 844 -304Q852 -301 852 -294Q852 -290 848 -284Q825 -258 800 -222Q775 -186 758 -147Q741 -108 741 -72Q741 -26 785 -26Q815 -26 846 -55Q876 -84 913 -133Q924 -147 932 -160Q941 -174 948 -184Q955 -191 963 -191Q975 -191 975 -182Q975 -171 959 -147Q943 -123 923 -97Q884 -49 855 -24Q826 1 782 1Z"/><path pathLength="1" style="--d:.85s;--t:.55s" d="M1003 3Q998 3 992 0Q986 -3 986 -8Q986 -16 989 -22Q1000 -46 1018 -81Q1035 -116 1052 -154Q1070 -191 1082 -224Q1095 -257 1095 -277Q1095 -283 1092 -288Q1090 -294 1082 -294Q1070 -294 1058 -284Q1047 -274 1038 -262Q1029 -249 1023 -241Q1003 -214 989 -192Q975 -169 960 -148Q946 -126 925 -100Q922 -96 918 -94Q915 -91 909 -91Q903 -91 898 -97Q894 -103 897 -108Q919 -143 940 -174Q961 -206 977 -229Q993 -252 999 -260Q1016 -282 1034 -302Q1053 -322 1085 -322Q1112 -322 1122 -307Q1133 -292 1133 -272Q1133 -236 1103 -179Q1140 -218 1182 -250Q1225 -282 1262 -304Q1299 -325 1318 -330Q1327 -333 1336 -335Q1346 -337 1354 -337Q1364 -337 1370 -332Q1377 -327 1377 -313Q1377 -299 1359 -274Q1341 -248 1316 -216Q1290 -183 1267 -150Q1244 -117 1234 -88Q1231 -81 1230 -74Q1229 -68 1229 -63Q1229 -36 1254 -36Q1270 -36 1294 -52Q1308 -61 1322 -72Q1335 -84 1342 -93Q1357 -110 1366 -122Q1376 -134 1386 -148Q1395 -163 1410 -185Q1413 -190 1416 -192Q1419 -194 1426 -194Q1437 -194 1437 -180Q1437 -174 1428 -160Q1419 -145 1406 -128Q1394 -110 1382 -96Q1371 -81 1366 -75Q1355 -62 1338 -48Q1322 -34 1305 -24Q1289 -15 1272 -11Q1255 -7 1239 -7Q1213 -7 1202 -22Q1190 -37 1190 -54Q1190 -80 1208 -114Q1225 -147 1250 -180Q1274 -214 1296 -241Q1317 -268 1325 -280Q1327 -283 1328 -286Q1329 -288 1329 -290Q1329 -298 1317 -298Q1311 -298 1303 -295Q1262 -278 1218 -245Q1173 -212 1136 -174Q1098 -135 1076 -101L1036 -38Q1031 -30 1027 -22Q1023 -13 1018 -5Q1012 3 1003 3Z"/><path pathLength="1" style="--d:1.32s;--t:.38s" d="M1479 10Q1427 10 1406 -20Q1386 -51 1386 -92Q1386 -122 1401 -164Q1416 -205 1442 -245Q1469 -285 1504 -312Q1539 -338 1579 -338Q1605 -338 1620 -324Q1636 -309 1636 -287Q1636 -245 1609 -206Q1582 -167 1539 -142Q1496 -117 1447 -117Q1441 -117 1435 -118Q1429 -118 1423 -119Q1420 -106 1420 -89Q1420 -63 1432 -41Q1445 -19 1481 -19Q1511 -19 1539 -34Q1567 -49 1586 -68Q1605 -87 1618 -102Q1631 -117 1645 -136Q1659 -156 1680 -188Q1684 -195 1692 -195Q1706 -195 1706 -180Q1706 -175 1704 -172Q1677 -126 1644 -84Q1611 -43 1570 -16Q1530 10 1479 10ZM1454 -148Q1492 -148 1526 -168Q1559 -189 1580 -220Q1602 -251 1602 -283Q1602 -294 1596 -301Q1591 -308 1578 -308Q1552 -308 1528 -290Q1504 -273 1484 -246Q1465 -220 1452 -194Q1438 -168 1432 -150Q1437 -149 1442 -148Q1448 -148 1454 -148Z"/></svg></h1>
     <p class="role">Content Creator · Vibe Coder</p>
     <p class="pos">verb &amp; noun</p>
     <p class="tag">ทำคอนเทนต์การเงิน/ภาษี และสร้างระบบหลังบ้านให้ร้านค้า</p>
@@ -453,9 +466,6 @@ main section[id]{scroll-margin-top:70px}
       <a class="row" href="https://chan-creator.pages.dev" target="_blank" rel="noopener" data-fan="chan">
         <span class="icon" style="background:#2a1230"><svg viewBox="0 0 40 40" width="38" aria-hidden="true"><path d="M4 31h32v5H4Z" fill="#0e6e6b"/><path d="M12 31V16l3-6 3 6v15Zm10 0V16l3-6 3 6v15Z" fill="#f4e9d8"/><path d="M18 31v-8h4v8Z" fill="#f4e9d8"/><path d="M20 4l4 4-4 5-4-5Z" fill="#c2183f"/></svg></span>
         <div><h3>จันท์ครีเอเตอร์</h3><p>เว็บจัดอันดับอินฟลูเอนเซอร์จันทบุรี 1,191 ช่อง · อัปเดตยอดอัตโนมัติด้วย AI · <u>กดเพื่อเปิดเว็บจริง</u></p></div></a>
-      <a class="row" href="https://www.tiktok.com/@sathapannuk" target="_blank" rel="noopener" data-fan="satha">
-        <span class="icon" style="background:#2F6FE4"><span style="font:700 30px Arial,sans-serif;color:#fff">฿</span></span>
-        <div><h3>SaThaPaNuk??</h3><p>สถาปนึก ไม่เน้นอยู่จริง เน้นทำคอนเทนต์ · 15.5K ผู้ติดตาม</p></div></a>
       <a class="row" href="https://www.tiktok.com/@zine_kkb" target="_blank" rel="noopener" data-fan="zine">
         <span class="icon" style="background:#111"><span style="font:600 13px var(--mono);color:#fff">ZINE</span></span>
         <div><h3>zinedine kubkrabee</h3><p>ช่องแบรนด์ส่วนตัว แชร์เรื่องภาษี ระบบร้านอาหาร และ AI</p></div></a>
@@ -491,10 +501,6 @@ main section[id]{scroll-margin-top:70px}
       <article class="work">
         <div class="thumb" style="background:linear-gradient(160deg,#D9F2E4,#3BB273)"></div>
         <div><h3>Intra Biz Ops</h3><p class="meta">SOP · POS · Business Workflow | 2026</p><hr><p>ระบบบริหารจัดการหลังบ้านสำหรับผู้ประกอบการ วางมาตรฐาน SOP และเชื่อม Workflow การทำงานในร้าน</p><a href="https://github.com/Zinedinekkb/intra-biz-ops" target="_blank" rel="noopener" aria-label="เปิดโปรเจกต์ Intra Biz Ops บน GitHub"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></a></div>
-      </article>
-      <article class="work">
-        <div class="thumb" style="background:linear-gradient(160deg,#D9E8FF,#2F6FE4)"></div>
-        <div><h3>ซีรีส์รีโนเวทห้องจิ๋ว</h3><p class="meta">TikTok @sathapannuk | 3.6M · 2.6M · 875.9K วิว</p><hr><p>คาแรกเตอร์สถาปนิกหมวกเหลือง เล่าเรื่องบ้าน ห้อง และเงินแบบกวน ๆ เพลย์ลิสต์นี้มี 54 คลิป และเป็นคลิปที่วิวสูงสุดของช่อง</p><a href="https://www.tiktok.com/@sathapannuk" target="_blank" rel="noopener" aria-label="เปิดช่อง TikTok sathapannuk"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></a></div>
       </article>
     </div>
   </section>
@@ -678,13 +684,10 @@ main section[id]{scroll-margin-top:70px}
   <section class="work-with" id="work-with-me">
     <h2>Work with me ✉</h2>
     <div class="stats">
-      <div class="stat"><b>15.5K</b><span>ผู้ติดตาม TikTok<br>@sathapannuk</span></div>
-      <div class="stat"><b>257.5K</b><span>ยอดถูกใจรวม<br>บน TikTok</span></div>
-      <div class="stat"><b>17.3K</b><span>ผู้ติดตาม Instagram<br>@sathapannuk</span></div>
-      <div class="stat"><b>3.6M</b><span>วิวคลิปที่สูงสุด<br>ซีรีส์รีโนเวทห้องจิ๋ว</span></div>
+      <div class="stat"><b>70K+</b><span>ผู้ติดตามรวม<br>ทุกช่องทาง</span></div>
     </div>
     <ul class="offer">
-      <li><span><b>คลิปรีวิวในสไตล์ช่อง</b> เอาสินค้าไปอยู่ในเรื่องบ้าน ห้องเล็ก หรือการใช้เงิน เล่าโดยคาแรกเตอร์สถาปนึก</span></li>
+      <li><span><b>คลิปรีวิวในสไตล์ของผม</b> เล่าสินค้าให้เข้ากับเรื่องการใช้เงิน การทำงาน หรือเครื่องมือ AI</span></li>
       <li><span><b>คลิปอธิบายให้เข้าใจง่าย</b> เรื่องภาษี การเงิน แอป หรือเครื่องมือ AI สำหรับคนเพิ่งเริ่มทำงาน</span></li>
       <li><span><b>ระบบและเครื่องมือสำหรับร้าน</b> วาง SOP ระบบหลังบ้าน หรือทำเว็บ/แอปเล็ก ๆ ด้วย vibe coding</span></li>
     </ul>
@@ -693,7 +696,7 @@ main section[id]{scroll-margin-top:70px}
       <a class="send" href="mailto:zinedinekkb@gmail.com?subject=%E0%B8%95%E0%B8%B4%E0%B8%94%E0%B8%95%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%B2%E0%B8%99">ส่งอีเมล ✉</a>
       <button type="button" id="copyMail">คัดลอกอีเมล</button>
     </div>
-    <p class="small">ตัวเลขจากหน้าโปรไฟล์ TikTok และ Instagram เดือนตุลาคม 2026</p>
+    <p class="small">ผู้ติดตามรวมทุกช่องทาง ณ เดือนพฤศจิกายน 2026</p>
   </section>
 
   <section class="about" id="about">
@@ -701,7 +704,7 @@ main section[id]{scroll-margin-top:70px}
     <p>ผมทำคลิปสั้นเรื่องภาษี การเงิน การตลาด และ vibe coding สำหรับคน Gen Z และผู้ประกอบการรุ่นใหม่</p>
     <p>ทำงานจริงมาตั้งแต่ก่อนเข้ามหาลัย ทั้งเป็น Butcher 2–3 ปี และลุยงานร้านจินข้าวมันไก่สไตล์สิงคโปร์อีกเกือบ 4 ปี ก่อนจะมาต่อยอดในสายการจัดการ คอมพิวเตอร์ธุรกิจ (ว่าที่เกียรตินิยมอันดับ 1)</p>
     <p>ชอบเอาประสบการณ์หน้างานจริง ทั้งเรื่องร้านอาหาร SOP ระบบ POS และระบบหลังบ้าน มาผสมกับการเขียนโค้ดสร้างเครื่องมือของตัวเอง เพื่อให้ทำงานและทำคลิปได้นาน ๆ โดยไม่หมดไฟ ☺</p>
-    <footer><a href="https://www.tiktok.com/@sathapannuk" target="_blank" rel="noopener">TikTok (@sathapannuk)</a><span>|</span><a href="https://www.instagram.com/sathapannuk/" target="_blank" rel="noopener">Instagram (@sathapannuk)</a><span>|</span><a href="https://www.tiktok.com/@zine_kkb" target="_blank" rel="noopener">TikTok ส่วนตัว (@zine_kkb)</a><span>|</span><a href="https://github.com/Zinedinekkb" target="_blank" rel="noopener">GitHub (@Zinedinekkb)</a><span>|</span><span>E-mail: <a href="mailto:zinedinekkb@gmail.com" style="user-select:all">zinedinekkb@gmail.com</a></span></footer>
+    <footer><a href="https://www.tiktok.com/@zine_kkb" target="_blank" rel="noopener">TikTok (@zine_kkb)</a><span>|</span><a href="https://github.com/Zinedinekkb" target="_blank" rel="noopener">GitHub (@Zinedinekkb)</a><span>|</span><span>E-mail: <a href="mailto:zinedinekkb@gmail.com" style="user-select:all">zinedinekkb@gmail.com</a></span></footer>
   </section>
 </main>
 
@@ -914,7 +917,6 @@ main section[id]{scroll-margin-top:70px}
   const fanData = {
     studio: [['#3E3E42','คิดไอเดีย + ตารางโพสต์'],['#F76240','บท + ตรวจข้อมูลภาษี'],['#2F6FE4','ตัดต่อ + ซับไทย']],
     chan:   [['#c2183f','ใครเป็นที่เท่าไหร่ในจันท์'],['#0e6e6b','ฉากแลนด์มาร์ก + ดินสอวาด'],['#5a2f66','ล็อกอิน Google + เพิ่มช่องเอง']],
-    satha:  [['#2F6FE4','ภาษีเข้าใจใน 45 วิ'],['#F7D74A','มาสคอตสถาปนิก'],['#3E3E42','ระบบหลังบ้าน']],
     zine:   [['#111111','zinedine kubkrabee'],['#3BB273','SOP & POS ร้านอาหาร'],['#F76240','Vibe Coding & AI']]
   };
   const setFan = key => {
@@ -935,6 +937,28 @@ main section[id]{scroll-margin-top:70px}
 
   // ---------- Scroll extras ----------
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // First screen: once the name is signed, the lines under it are typed in fast, then the two buttons come up.
+  if (!still) {
+    const title = document.querySelector('.title'), go = title.querySelector('.go');
+    const lines = [...title.querySelectorAll('.role, .pos, .tag')].map(el => {
+      const chars = [...new Intl.Segmenter('th', { granularity: 'grapheme' }).segment(el.textContent)].map(g => g.segment);
+      el.setAttribute('aria-label', el.textContent);
+      const typed = document.createElement('span'), left = document.createElement('span');
+      left.className = 'left'; left.textContent = el.textContent; el.replaceChildren(typed, left);
+      return { typed, left, chars };
+    });
+    go.classList.add('wait');
+    let n = 0, at = 0;
+    const next = () => {
+      const l = lines[n]; if (!l) { go.classList.remove('wait'); return; }
+      at++; l.typed.textContent = l.chars.slice(0, at).join(''); l.left.textContent = l.chars.slice(at).join('');
+      l.typed.className = 'caret';
+      if (at >= l.chars.length) { l.typed.className = ''; n++; at = 0; setTimeout(next, 120); }
+      else setTimeout(next, 18 + Math.random() * 22);
+    };
+    setTimeout(next, 1350);
+  }
   // Pencil line: how far down the page you are.
   const pencil = document.getElementById('pencil'), lead = pencil.querySelector('i'), tip = pencil.querySelector('svg');
   const progress = () => { const max = document.documentElement.scrollHeight - innerHeight, w = innerWidth * (max > 0 ? scrollY / max : 0);

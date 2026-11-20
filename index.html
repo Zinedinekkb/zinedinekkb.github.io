@@ -69,7 +69,14 @@ a{color:inherit}
 /* the name is the Ms Madi outline, signed in: each letter's outline is drawn, then filled */
 .title h1 .sig{display:block;height:.79em;width:auto;margin:.15em auto .16em;overflow:visible;color:var(--ink)}
 .sig path{fill:currentColor;stroke:currentColor;stroke-width:5;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0;stroke-opacity:0;
-  animation:sig-draw var(--t,.5s) cubic-bezier(.45,.05,.4,1) var(--d,0s) both,sig-fill .55s ease-out calc(var(--d,0s) + var(--t,.5s) - .1s) both}
+  animation:sig-draw var(--t,.5s) cubic-bezier(.45,.05,.4,1) calc(var(--d,0s) + var(--intro,0s)) both,sig-fill .55s ease-out calc(var(--d,0s) + var(--intro,0s) + var(--t,.5s) - .1s) both}
+/* opening: the desk objects spin in a small ring in the middle, then burst out to their places; the name is signed after */
+@media (prefers-reduced-motion:no-preference){.title{--intro:.9s}}
+/* scrolling down: the objects fly out from the middle and fade, the name blurs away (objects you carried stay put) */
+.desk{--p:0}
+.obj:not(.moved):not([data-id="tools"]){translate:calc(var(--fx,0) * var(--p) * 1px) calc(var(--fy,0) * var(--p) * 1px);opacity:clamp(0,calc(1 - var(--p) * 1.15),1)}
+.desk .obj.gone{opacity:0}
+.title{opacity:clamp(0,calc(1 - var(--p) * 1.35),1);scale:calc(1 - var(--p) * .08);filter:blur(calc(var(--p) * 12px))}
 @keyframes sig-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @keyframes sig-fill{from{fill-opacity:0;stroke-opacity:1}to{fill-opacity:1;stroke-opacity:0}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
@@ -772,11 +779,24 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
       s.x = x / w * 100; s.y = y / h * 100; }
     el.style.transform = `translate(${x}px, ${y}px) rotate(${s.r}deg)`; };
 
+  // Which way each object flies when the desk is scrolled away: out from the middle, a little upwards.
+  const aim = () => { const w = desk.clientWidth, h = desk.clientHeight;
+    objs.forEach(el => { const s = state[el.dataset.id]; if (!s) return;
+      let dx = s.x * w / 100 + el.offsetWidth / 2 - w / 2, dy = s.y * h / 100 + el.offsetHeight / 2 - h / 2;
+      const l = Math.hypot(dx, dy) || 1; dx /= l; dy /= l;
+      el.style.setProperty('--fx', Math.round(dx * w * .42)); el.style.setProperty('--fy', Math.round((dy * .5 - .45) * h * .5)); }); };
+  // Grabbing an object while it is flying out: keep it exactly where it is shown, and it no longer flies.
+  const bake = el => { if (el.classList.contains('moved') || el === tools) return;
+    const s = state[el.dataset.id], k = +getComputedStyle(desk).getPropertyValue('--p') || 0;
+    s.x += (+el.style.getPropertyValue('--fx') || 0) * k / desk.clientWidth * 100; s.y += (+el.style.getPropertyValue('--fy') || 0) * k / desk.clientHeight * 100;
+    el.style.transition = 'none'; el.classList.add('moved'); place(el); el.offsetWidth; el.style.transition = ''; };
+
   function setMode(m, quiet) {
     // On narrow desks the name, tagline and buttons fill the middle, so the toolbox starts below them.
     const narrow = desk.clientWidth < 600;
     objs.forEach(el => { const [x, y0, r] = P[m][el.dataset.id], y = narrow && el === tools ? Math.max(y0, 70) : y0; state[el.dataset.id] = { x, y, r };
-      el.classList.toggle('gone', !!hiddenIn[m]?.has(el.dataset.id)); place(el); });
+      el.classList.toggle('gone', !!hiddenIn[m]?.has(el.dataset.id)); el.classList.remove('moved'); place(el); });
+    aim();
     document.querySelectorAll('.menu button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === m));
     if (!quiet) toast(toastText[m]);
   }
@@ -788,6 +808,7 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
   const main = document.querySelector('main');
   objs.forEach(el => el.addEventListener('pointerdown', e => {
     if (e.target.closest('button, label, a, input, .bar')) return;
+    bake(el);
     const s = state[el.dataset.id], sx = e.clientX, sy = e.clientY, sy0 = scrollY, ox = s.x, oy = s.y;
     let cx = sx, cy = sy, raf = 0;
     el.setPointerCapture(e.pointerId); el.classList.add('drag');
@@ -911,7 +932,7 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
     cv.addEventListener('pointermove', move); cv.addEventListener('pointerup', up, { once: true }); cv.addEventListener('pointercancel', up, { once: true });
   });
 
-  window.addEventListener('resize', () => { objs.forEach(place); fit(); });
+  window.addEventListener('resize', () => { objs.forEach(place); aim(); fit(); });
   addEventListener('scroll', () => place(tools), { passive: true });
   addEventListener('load', fit);
 
@@ -1005,7 +1026,7 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
       if (at >= l.chars.length) { l.typed.className = ''; n++; at = 0; setTimeout(next, 120); }
       else setTimeout(next, 18 + Math.random() * 22);
     };
-    setTimeout(next, 1350);
+    setTimeout(next, 2250);
   }
   // Pencil line: how far down the page you are.
   const pencil = document.getElementById('pencil'), lead = pencil.querySelector('i'), tip = pencil.querySelector('svg');
@@ -1016,7 +1037,7 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
   // Headings get a hand-drawn scribble underneath; cards drop in like paper, a little tilted, one after another.
   main.querySelectorAll('h2').forEach(h => { h.classList.add('scrib');
     h.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M1 8C18 3 34 10 52 6S84 3 99 7"/></svg>'); });
-  const groups = ['.row', '.work', '.exp-card', '.stat', '.offer li', '.skill-tags > *', '.cert'];
+  const groups = ['.row', '.work', '.exp-card', '.stat', '.offer li', '.skill-tags > *'];
   groups.forEach(sel => main.querySelectorAll(sel).forEach((el, i) => { el.classList.add('drop');
     el.style.setProperty('--tilt', (i % 2 ? -1 : 1) * (1.5 + (i % 3)) + 'deg'); el.style.setProperty('--d', Math.min(i, 6) * 0.08 + 's'); }));
 
@@ -1031,6 +1052,26 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
     en.target.classList.add('in'); seen.unobserve(en.target);
     if (en.target.classList.contains('stat')) countUp(en.target.querySelector('b')); }), { rootMargin: '0px 0px -12% 0px' });
   main.querySelectorAll('h2.scrib, .drop').forEach(el => seen.observe(el));
+
+  // Certificates: thrown on the page like loose paper. Each one starts somewhere off to the side, turned, and flutters
+  // down into its place as you scroll to it (scroll back up and they blow away again).
+  if (!still) {
+    const papers = [...main.querySelectorAll('#certificates .cert')].map((el, i) => {
+      const side = i % 2 ? 1 : -1, r = Math.sin(i * 12.9898) * 43758.5453, rnd = r - Math.floor(r);
+      return { el, col: i % 4, ph: rnd * 6.28, sx: side * (120 + rnd * 260), sy: 160 + rnd * 220, sr: side * (18 + rnd * 30), wide: el.classList.contains('cert-stack') };
+    });
+    let busy = false;
+    const blow = () => { busy = false; const vh = innerHeight;
+      papers.forEach(q => { if (!q.el.offsetParent) return;
+        const t = q.el.getBoundingClientRect().top, e = Math.min(1, Math.max(0, (vh - t) / (vh * .55) - q.col * .07));
+        const k = 1 - e * e * (3 - 2 * e), f = q.wide ? .35 : 1;
+        q.el.style.translate = `${((q.sx + Math.sin(k * 5 + q.ph) * 40) * k * f).toFixed(1)}px ${(q.sy * k).toFixed(1)}px`;
+        q.el.style.rotate = `${((q.sr + Math.sin(k * 7 + q.ph) * 10) * k * f).toFixed(2)}deg`;
+        q.el.style.opacity = (1 - k * k * .85).toFixed(3); }); };
+    const ask = () => { if (!busy) { busy = true; requestAnimationFrame(blow); } };
+    addEventListener('scroll', ask, { passive: true }); addEventListener('resize', ask); blow();
+    document.querySelector('.more-certs')?.addEventListener('click', () => setTimeout(blow));
+  }
 
   // Certificates: open the full-size image; clicking outside it closes the viewer.
   const viewer = document.getElementById('viewer'), viewerImg = document.getElementById('viewerImg');
@@ -1098,6 +1139,24 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
   })();
 
   fit(); setMode('chaos', true);
+
+  // Opening (like the tour page of Chan Creator): the objects spin round in a small ring in the middle of the desk, then
+  // burst out to their places one after another. Scrolling the desk away sends them flying out and blurs the name.
+  if (!still) {
+    const w = desk.clientWidth, h = desk.clientHeight, R = Math.min(w, h) * .1, n = objs.length, t0 = performance.now();
+    const ring = ms => { const spin = (ms - t0) / 1600 * 360;
+      objs.forEach((el, i) => { const a = i * 360 / n + spin;
+        el.style.transform = `translate(${w / 2 - el.offsetWidth / 2}px, ${h * .48 - el.offsetHeight / 2}px) rotate(${a}deg) translate(${R}px) rotate(${-a}deg) scale(.35)`; }); };
+    objs.forEach(el => { el.style.transition = 'none'; }); ring(t0);
+    let spinning = true; const turn = ms => { if (!spinning) return; ring(ms); requestAnimationFrame(turn); }; requestAnimationFrame(turn);
+    setTimeout(() => { spinning = false;
+      objs.forEach((el, i) => { el.style.transition = `transform .74s cubic-bezier(.16,1,.3,1) ${i * 42}ms, opacity .5s`; place(el); });
+      setTimeout(() => objs.forEach(el => { el.style.transition = ''; }), 1400); }, 420);
+
+    let busy = false;
+    const fly = () => { busy = false; desk.style.setProperty('--p', Math.min(1, Math.max(0, scrollY / (desk.offsetHeight * .8))).toFixed(3)); };
+    addEventListener('scroll', () => { if (!busy) { busy = true; requestAnimationFrame(fly); } }, { passive: true }); fly();
+  }
 })();
 </script>
 </body>

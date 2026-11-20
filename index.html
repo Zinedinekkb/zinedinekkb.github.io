@@ -222,22 +222,12 @@ h2{font:500 20px/1.2 var(--mono);color:var(--ink);margin:0 0 22px}
 .cert:hover img{rotate:0deg;scale:1.03}
 .cert b{font:600 13px/1.4 var(--mono);color:var(--ink)}
 .cert span:not(.pic){font-size:11px;line-height:1.45;color:var(--ink-3)}
-.cert-stack{grid-column:1/-1;flex-direction:row;align-items:flex-start;gap:22px;cursor:default}
-.cert-stack:hover{transform:none}
-.cert-stack .stack{flex:none;width:190px;height:150px}
-.cert-stack .stack img{position:absolute;left:0;top:6px;width:100%;rotate:-6deg}
-.cert-stack .stack img:nth-child(2){left:8px;top:2px;rotate:3deg}
-.cert-stack .stack img:nth-child(3){left:4px;top:10px;rotate:-1deg}
-.cert-stack:hover .stack img:nth-child(1){rotate:-10deg;translate:-8px 0}
-.cert-stack:hover .stack img:nth-child(2){rotate:7deg;translate:10px 0}
-.cert-stack b,.cert-stack div>span{display:block;margin-bottom:4px}
-.cert-stack ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:2px 22px}
-@media (min-width:760px){.cert-stack ul:has(li:nth-child(7)){grid-template-columns:repeat(2,minmax(0,1fr))}}
-.cert-stack li button{font:inherit;font-size:13px;text-align:left;color:var(--ink-2);background:none;border:0;padding:4px 0;cursor:zoom-in}
-.cert-stack li button::before{content:"✎ ";color:var(--pop)}
-.cert-stack li button:hover{color:var(--pop);text-decoration:underline}
-@media (max-width:560px){.cert-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cert{padding:12px 10px 10px}.cert b{font-size:12px}
-  .cert-stack{flex-direction:column}.cert-stack .stack{width:100%;max-width:240px;height:auto;aspect-ratio:4/3}}
+@media (max-width:560px){.cert-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cert{padding:12px 10px 10px}.cert b{font-size:12px}}
+/* certificates burst out of one pile when their group comes into view (see "Certificates: boom" in the script) */
+.cert.wait{opacity:0}
+.scraps{position:fixed;inset:0;z-index:1400;pointer-events:none;overflow:hidden}
+.scraps i{position:absolute;left:0;top:0;width:var(--w);height:var(--h);background:#fffdf8;border:1px solid #e6ddd0;border-radius:2px;box-shadow:0 2px 6px rgba(40,30,20,.12);
+  background-image:repeating-linear-gradient(transparent 0 5px,rgba(47,111,228,.16) 5px 6px)}
 .viewer{border:0;padding:0;background:none;max-width:min(94vw,1100px);max-height:92vh;overflow:visible}
 /* live demo: a small app window in the middle of the page */
 .app-win{border:0;padding:0;background:none;width:min(94vw,1040px);max-width:none;max-height:none;overflow:visible}
@@ -607,45 +597,54 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
           <b>Gemini Certified Student (University)</b><span>Google for Education · 17 ต.ค. 2568 (ใช้ได้ถึง ต.ค. 2571)</span></button>
         <button type="button" class="cert" data-full="certs/google-genai.jpg"><span class="pic"><img src="certs/google-genai-s.jpg" alt="Completion badge Introduction to Generative AI จาก Google Cloud" loading="lazy" width="360" height="289"></span>
           <b>Introduction to Generative AI (Completion Badge)</b><span>Google Cloud Skills Boost · 28 ต.ค. 2569</span></button>
-        <div class="cert cert-stack">
-          <span class="pic stack" aria-hidden="true"><img src="certs/ai-smart-s.jpg" alt="" loading="lazy"><img src="certs/ai-agent-s.jpg" alt="" loading="lazy"><img src="certs/ai-chatgpt-s.jpg" alt="" loading="lazy"></span>
-          <div><b>บทเรียน AI 16 วิชา (TH AI Passport)</b><span>สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span>
-            <ul>
-              <li><button type="button" data-full="certs/ai-smart.jpg">ทำงานให้ smart กว่าเดิมด้วย AI</button></li>
-              <li><button type="button" data-full="certs/ai-canva.jpg">ทำคอนเทนต์ให้ปังด้วย Canva</button></li>
-              <li><button type="button" data-full="certs/ai-canva-teach.jpg">แพลนการสอนได้ง่ายขึ้นกว่าเดิมด้วย Canva AI</button></li>
-              <li><button type="button" data-full="certs/ai-genai-basic.jpg">เทคนิคการใช้ Gen AI สำหรับมือใหม่</button></li>
-              <li><button type="button" data-full="certs/ai-delivery.jpg">AI เพื่อการส่งมอบและดูแลระบบซอฟต์แวร์ (AI for Software Delivery)</button></li>
-              <li><button type="button" data-full="certs/ai-leader.jpg">ผู้นำยุค AI: พร้อมสร้างความเชื่อมั่นในองค์กร</button></li>
-              <li><button type="button" data-full="certs/ai-chatgpt.jpg">ปลดล็อก ChatGPT ขั้นสูง</button></li>
-              <li><button type="button" data-full="certs/ai-agent.jpg">AI Agent การสร้างผู้ช่วยอัจฉริยะเพื่อการทำงาน</button></li>
-              <li><button type="button" data-full="certs/ai-change.jpg">การบริหารสู่องค์กรที่พร้อมเปลี่ยนแปลงด้วย AI</button></li>
-              <li><button type="button" data-full="certs/ai-customgpt.jpg">ออกแบบผู้ช่วย AI (Custom GPT) ภายในหน่วยงาน</button></li>
-              <li><button type="button" data-full="certs/ai-context.jpg">การบริหาร Context window เพื่อใช้ AI อย่างคุ้มค่า</button></li>
-              <li><button type="button" data-full="certs/ai-check.jpg">การตรวจสอบและปรับปรุงผลลัพธ์จาก AI</button></li>
-              <li><button type="button" data-full="certs/ai-mcp.jpg">แก้ปมโค้ดตกรุ่นและปัญหา Syntax เก่า ด้วย MCP และ Context7</button></li>
-              <li><button type="button" data-full="certs/ai-guide.jpg">คู่มือสร้างทักษะการใช้ AI อย่างเป็นระบบ</button></li>
-              <li><button type="button" data-full="certs/ai-how.jpg">AI เรียนรู้อย่างไร? เปิดเผยเบื้องหลังแบบเข้าใจง่าย</button></li>
-              <li><button type="button" data-full="certs/ai-daily.jpg">เพิ่มประสิทธิภาพงานประจำวันด้วย AI</button></li>
-            </ul></div>
-        </div>
+        <button type="button" class="cert" data-full="certs/ai-smart.jpg"><span class="pic"><img src="certs/ai-smart-s.jpg" alt="ใบรับรอง ทำงานให้ smart กว่าเดิมด้วย AI" loading="lazy" width="360" height="270"></span>
+          <b>ทำงานให้ smart กว่าเดิมด้วย AI</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-canva.jpg"><span class="pic"><img src="certs/ai-canva-s.jpg" alt="ใบรับรอง ทำคอนเทนต์ให้ปังด้วย Canva" loading="lazy" width="360" height="270"></span>
+          <b>ทำคอนเทนต์ให้ปังด้วย Canva</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-canva-teach.jpg"><span class="pic"><img src="certs/ai-canva-teach-s.jpg" alt="ใบรับรอง แพลนการสอนได้ง่ายขึ้นกว่าเดิมด้วย Canva AI" loading="lazy" width="360" height="270"></span>
+          <b>แพลนการสอนได้ง่ายขึ้นกว่าเดิมด้วย Canva AI</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-genai-basic.jpg"><span class="pic"><img src="certs/ai-genai-basic-s.jpg" alt="ใบรับรอง เทคนิคการใช้ Gen AI สำหรับมือใหม่" loading="lazy" width="360" height="270"></span>
+          <b>เทคนิคการใช้ Gen AI สำหรับมือใหม่</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-delivery.jpg"><span class="pic"><img src="certs/ai-delivery-s.jpg" alt="ใบรับรอง AI เพื่อการส่งมอบและดูแลระบบซอฟต์แวร์ (AI for Software Delivery)" loading="lazy" width="360" height="270"></span>
+          <b>AI เพื่อการส่งมอบและดูแลระบบซอฟต์แวร์ (AI for Software Delivery)</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-leader.jpg"><span class="pic"><img src="certs/ai-leader-s.jpg" alt="ใบรับรอง ผู้นำยุค AI: พร้อมสร้างความเชื่อมั่นในองค์กร" loading="lazy" width="360" height="270"></span>
+          <b>ผู้นำยุค AI: พร้อมสร้างความเชื่อมั่นในองค์กร</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-chatgpt.jpg"><span class="pic"><img src="certs/ai-chatgpt-s.jpg" alt="ใบรับรอง ปลดล็อก ChatGPT ขั้นสูง" loading="lazy" width="360" height="270"></span>
+          <b>ปลดล็อก ChatGPT ขั้นสูง</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-agent.jpg"><span class="pic"><img src="certs/ai-agent-s.jpg" alt="ใบรับรอง AI Agent การสร้างผู้ช่วยอัจฉริยะเพื่อการทำงาน" loading="lazy" width="360" height="270"></span>
+          <b>AI Agent การสร้างผู้ช่วยอัจฉริยะเพื่อการทำงาน</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-change.jpg"><span class="pic"><img src="certs/ai-change-s.jpg" alt="ใบรับรอง การบริหารสู่องค์กรที่พร้อมเปลี่ยนแปลงด้วย AI" loading="lazy" width="360" height="270"></span>
+          <b>การบริหารสู่องค์กรที่พร้อมเปลี่ยนแปลงด้วย AI</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-customgpt.jpg"><span class="pic"><img src="certs/ai-customgpt-s.jpg" alt="ใบรับรอง ออกแบบผู้ช่วย AI (Custom GPT) ภายในหน่วยงาน" loading="lazy" width="360" height="270"></span>
+          <b>ออกแบบผู้ช่วย AI (Custom GPT) ภายในหน่วยงาน</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-context.jpg"><span class="pic"><img src="certs/ai-context-s.jpg" alt="ใบรับรอง การบริหาร Context window เพื่อใช้ AI อย่างคุ้มค่า" loading="lazy" width="360" height="270"></span>
+          <b>การบริหาร Context window เพื่อใช้ AI อย่างคุ้มค่า</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-check.jpg"><span class="pic"><img src="certs/ai-check-s.jpg" alt="ใบรับรอง การตรวจสอบและปรับปรุงผลลัพธ์จาก AI" loading="lazy" width="360" height="270"></span>
+          <b>การตรวจสอบและปรับปรุงผลลัพธ์จาก AI</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-mcp.jpg"><span class="pic"><img src="certs/ai-mcp-s.jpg" alt="ใบรับรอง แก้ปมโค้ดตกรุ่นและปัญหา Syntax เก่า ด้วย MCP และ Context7" loading="lazy" width="360" height="270"></span>
+          <b>แก้ปมโค้ดตกรุ่นและปัญหา Syntax เก่า ด้วย MCP และ Context7</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-guide.jpg"><span class="pic"><img src="certs/ai-guide-s.jpg" alt="ใบรับรอง คู่มือสร้างทักษะการใช้ AI อย่างเป็นระบบ" loading="lazy" width="360" height="270"></span>
+          <b>คู่มือสร้างทักษะการใช้ AI อย่างเป็นระบบ</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-how.jpg"><span class="pic"><img src="certs/ai-how-s.jpg" alt="ใบรับรอง AI เรียนรู้อย่างไร? เปิดเผยเบื้องหลังแบบเข้าใจง่าย" loading="lazy" width="360" height="270"></span>
+          <b>AI เรียนรู้อย่างไร? เปิดเผยเบื้องหลังแบบเข้าใจง่าย</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
+        <button type="button" class="cert" data-full="certs/ai-daily.jpg"><span class="pic"><img src="certs/ai-daily-s.jpg" alt="ใบรับรอง เพิ่มประสิทธิภาพงานประจำวันด้วย AI" loading="lazy" width="360" height="270"></span>
+          <b>เพิ่มประสิทธิภาพงานประจำวันด้วย AI</b><span>TH AI Passport · สำนักงานคณะกรรมการดิจิทัลเพื่อเศรษฐกิจและสังคมแห่งชาติ (สดช.) · 27–28 ต.ค. 2569</span></button>
       </div>
     </div>
 
     <div class="cert-group">
       <h3>เขียนโค้ด &amp; ระบบอัตโนมัติ</h3>
       <div class="cert-grid">
-        <div class="cert cert-stack">
-          <span class="pic stack" aria-hidden="true"><img src="certs/fcc-backend-s.jpg" alt="" loading="lazy"><img src="certs/fcc-frontend-s.jpg" alt="" loading="lazy"><img src="certs/fcc-dataviz-s.jpg" alt="" loading="lazy"></span>
-          <div><b>freeCodeCamp Developer Certification 5 ใบ</b><span>freeCodeCamp.org · 28 ต.ค. 2569 · ใบละประมาณ 300 ชั่วโมง</span>
-            <ul>
-              <li><button type="button" data-full="certs/fcc-frontend.jpg">Front-End Development Libraries V8</button></li>
-              <li><button type="button" data-full="certs/fcc-backend.jpg">Back-End Development and APIs V8</button></li>
-              <li><button type="button" data-full="certs/fcc-dataviz.jpg">Data Visualization V8</button></li>
-              <li><button type="button" data-full="certs/fcc-qa.jpg">Quality Assurance</button></li>
-              <li><button type="button" data-full="certs/fcc-infosec.jpg">Information Security</button></li>
-            </ul></div>
-        </div>
+        <button type="button" class="cert" data-full="certs/fcc-frontend.jpg"><span class="pic"><img src="certs/fcc-frontend-s.jpg" alt="ใบรับรอง Front-End Development Libraries V8" loading="lazy" width="360" height="240"></span>
+          <b>Front-End Development Libraries V8</b><span>freeCodeCamp.org · 28 ต.ค. 2569 · ประมาณ 300 ชั่วโมง</span></button>
+        <button type="button" class="cert" data-full="certs/fcc-backend.jpg"><span class="pic"><img src="certs/fcc-backend-s.jpg" alt="ใบรับรอง Back-End Development and APIs V8" loading="lazy" width="360" height="240"></span>
+          <b>Back-End Development and APIs V8</b><span>freeCodeCamp.org · 28 ต.ค. 2569 · ประมาณ 300 ชั่วโมง</span></button>
+        <button type="button" class="cert" data-full="certs/fcc-dataviz.jpg"><span class="pic"><img src="certs/fcc-dataviz-s.jpg" alt="ใบรับรอง Data Visualization V8" loading="lazy" width="360" height="240"></span>
+          <b>Data Visualization V8</b><span>freeCodeCamp.org · 28 ต.ค. 2569 · ประมาณ 300 ชั่วโมง</span></button>
+        <button type="button" class="cert" data-full="certs/fcc-qa.jpg"><span class="pic"><img src="certs/fcc-qa-s.jpg" alt="ใบรับรอง Quality Assurance" loading="lazy" width="360" height="240"></span>
+          <b>Quality Assurance</b><span>freeCodeCamp.org · 28 ต.ค. 2569 · ประมาณ 300 ชั่วโมง</span></button>
+        <button type="button" class="cert" data-full="certs/fcc-infosec.jpg"><span class="pic"><img src="certs/fcc-infosec-s.jpg" alt="ใบรับรอง Information Security" loading="lazy" width="360" height="240"></span>
+          <b>Information Security</b><span>freeCodeCamp.org · 28 ต.ค. 2569 · ประมาณ 300 ชั่วโมง</span></button>
         <button type="button" class="cert" data-full="certs/n8n-essentials.jpg"><span class="pic"><img src="certs/n8n-essentials-s.jpg" alt="ใบรับรอง n8n Essentials: Your First Workflows" loading="lazy" width="360" height="238"></span>
           <b>n8n Essentials: Your First Workflows (N8N101)</b><span>n8n Academy · 28 ต.ค. 2569</span></button>
         <button type="button" class="cert" data-full="certs/n8n-integrations.jpg"><span class="pic"><img src="certs/n8n-integrations-s.jpg" alt="ใบรับรอง n8n Integrations: APIs &amp; Connected Workflows" loading="lazy" width="360" height="238"></span>
@@ -1053,24 +1052,41 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
     if (en.target.classList.contains('stat')) countUp(en.target.querySelector('b')); }), { rootMargin: '0px 0px -12% 0px' });
   main.querySelectorAll('h2.scrib, .drop').forEach(el => seen.observe(el));
 
-  // Certificates: thrown on the page like loose paper. Each one starts somewhere off to the side, turned, and flutters
-  // down into its place as you scroll to it (scroll back up and they blow away again).
-  if (!still) {
-    const papers = [...main.querySelectorAll('#certificates .cert')].map((el, i) => {
-      const side = i % 2 ? 1 : -1, r = Math.sin(i * 12.9898) * 43758.5453, rnd = r - Math.floor(r);
-      return { el, col: i % 4, ph: rnd * 6.28, sx: side * (120 + rnd * 260), sy: 160 + rnd * 220, sr: side * (18 + rnd * 30), wide: el.classList.contains('cert-stack') };
-    });
-    let busy = false;
-    const blow = () => { busy = false; const vh = innerHeight;
-      papers.forEach(q => { if (!q.el.offsetParent) return;
-        const t = q.el.getBoundingClientRect().top, e = Math.min(1, Math.max(0, (vh - t) / (vh * .55) - q.col * .07));
-        const k = 1 - e * e * (3 - 2 * e), f = q.wide ? .35 : 1;
-        q.el.style.translate = `${((q.sx + Math.sin(k * 5 + q.ph) * 40) * k * f).toFixed(1)}px ${(q.sy * k).toFixed(1)}px`;
-        q.el.style.rotate = `${((q.sr + Math.sin(k * 7 + q.ph) * 10) * k * f).toFixed(2)}deg`;
-        q.el.style.opacity = (1 - k * k * .85).toFixed(3); }); };
-    const ask = () => { if (!busy) { busy = true; requestAnimationFrame(blow); } };
-    addEventListener('scroll', ask, { passive: true }); addEventListener('resize', ask); blow();
-    document.querySelector('.more-certs')?.addEventListener('click', () => setTimeout(blow));
+  // Certificates: boom. When a group comes into view, all its certificates start as one pile in the middle, blow out
+  // past their places spinning, then flutter down and land; loose paper scraps fly off and fall away. Once per group.
+  if (!still && Element.prototype.animate) {
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const scraps = document.createElement('div'); scraps.className = 'scraps'; scraps.setAttribute('aria-hidden', 'true'); document.body.append(scraps);
+    const boom = grid => {
+      const cards = [...grid.querySelectorAll('.cert')], g = grid.getBoundingClientRect(), gx = g.left + g.width / 2, gy = g.top + Math.min(g.height, innerHeight) / 2;
+      cards.forEach((el, i) => {
+        const r = el.getBoundingClientRect(), cx = gx - (r.left + r.width / 2), cy = gy - (r.top + r.height / 2);
+        const ox = -cx * rnd(.45, .8) + rnd(-90, 90), oy = -cy * rnd(.3, .6) - rnd(140, 260), spin = rnd(160, 320) * (i % 2 ? 1 : -1), w = rnd(-30, 30);
+        el.classList.remove('wait');
+        el.animate([
+          { translate: `${cx}px ${cy}px`, rotate: `${rnd(-20, 20)}deg`, scale: .25, opacity: 0, easing: 'cubic-bezier(.1,.9,.3,1)' },
+          { offset: .06, opacity: 1 },
+          { offset: .34, translate: `${ox}px ${oy}px`, rotate: `${spin}deg`, scale: 1.06, easing: 'ease-in-out' },
+          { offset: .58, translate: `${ox * .35 + w}px ${oy * .25 + 30}px`, rotate: `${spin * .08 + w}deg`, scale: 1, easing: 'ease-in-out' },
+          { offset: .8, translate: `${-w * .5}px -10px`, rotate: `${-w * .3}deg`, easing: 'ease-out' },
+          { translate: '0px 0px', rotate: '0deg', scale: 1, opacity: 1 }
+        ], { duration: rnd(1500, 1900), delay: i * 35, fill: 'backwards' });
+      });
+      for (let k = 0; k < 22; k++) {
+        const it = document.createElement('i'), a = rnd(0, Math.PI * 2), d = rnd(160, Math.max(innerWidth, innerHeight) * .55);
+        it.style.setProperty('--w', rnd(18, 46) + 'px'); it.style.setProperty('--h', rnd(24, 60) + 'px'); scraps.append(it);
+        const x1 = gx + Math.cos(a) * d, y1 = gy + Math.sin(a) * d * .6 - rnd(80, 220), s0 = rnd(-1, 1) * 720;
+        it.animate([
+          { transform: `translate(${gx}px, ${gy}px) rotate(0deg) scale(.3)`, opacity: 1, easing: 'cubic-bezier(.1,.9,.3,1)' },
+          { offset: .35, transform: `translate(${x1}px, ${y1}px) rotate(${s0 * .5}deg) rotateX(${rnd(0, 180)}deg) scale(1)`, easing: 'ease-in' },
+          { transform: `translate(${x1 + rnd(-120, 120)}px, ${y1 + rnd(260, 520)}px) rotate(${s0}deg) rotateX(${rnd(180, 540)}deg) scale(1)`, opacity: 0 }
+        ], { duration: rnd(1600, 2400), delay: rnd(0, 120), fill: 'both' }).onfinish = () => it.remove();
+      }
+    };
+    const grids = [...main.querySelectorAll('#certificates .cert-grid')];
+    grids.forEach(g => g.querySelectorAll('.cert').forEach(el => el.classList.add('wait')));
+    const watch = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; watch.unobserve(e.target); boom(e.target); }), { rootMargin: '0px 0px -25% 0px' });
+    grids.forEach(g => watch.observe(g));
   }
 
   // Certificates: open the full-size image; clicking outside it closes the viewer.

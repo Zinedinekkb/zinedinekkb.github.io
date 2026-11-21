@@ -295,7 +295,7 @@ h2.scrib.in path{stroke-dashoffset:0}
 main section[id]{scroll-margin-top:70px}
 main{position:relative;z-index:6}
 main section{pointer-events:none}
-main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cert,.stat,.exp-card,.skill-tags,.thumb,.fan){pointer-events:auto}
+main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cert,.stat,.exp-card,.skill-tags,.thumb,.fan,.sc-card){pointer-events:auto}
 .desk.drawing ~ main section, .desk.drawing ~ main section *{pointer-events:none}
 
 /* first screen: two plain ways out of the desk */
@@ -304,8 +304,64 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
 .title .go a.main{background:var(--you);border-color:var(--you);color:#fff}
 .title .go a:hover{background:var(--pop);border-color:var(--pop);color:#fff}
 
-/* certificates: the first groups, then the rest on demand */
-.certs.short .cert-group:nth-of-type(n+3){display:none}
+/* ---------- work by category (idea from Fastwork's profile showcase): on wide screens the section pins to the window,
+   the card slides right as the list of categories comes in on the left, and scrolling on swaps the card category by category ---------- */
+.sc{--n:4;position:relative}
+.sc-head h2{margin:0 0 6px}
+.sc-head p{margin:0 0 22px;color:var(--ink-3);font-size:13px}
+.sc-list{display:none}
+.sc-stage{display:grid;gap:26px}
+.sc-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:24px;overflow:hidden;box-shadow:0 24px 60px -28px rgba(40,30,20,.35),0 2px 6px rgba(40,30,20,.05);max-width:640px;width:100%}
+.sc-cover{position:relative;height:150px;background:linear-gradient(120deg,var(--c1),var(--c2));color:#fff;overflow:hidden}
+.sc-cover b{position:absolute;left:26px;top:50%;translate:0 -50%;font:700 clamp(22px,3.2vw,30px)/1.05 "IBM Plex Sans Thai",system-ui,sans-serif;letter-spacing:-.02em;z-index:1}
+.sc-cover b small{font:500 13px var(--mono);opacity:.8}
+.sc-cover img{position:absolute;right:22px;top:16px;width:150px;height:200px;object-fit:cover;object-position:top;border-radius:14px;rotate:6deg;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.sc-body{position:relative;padding:0 26px 24px}
+.sc-ava{display:grid;place-items:center;width:64px;height:64px;margin-top:-32px;border-radius:50%;background:#fff;border:3px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.18);font:400 38px/1 var(--script);color:var(--ink);position:relative;z-index:2}
+.sc-body h3{margin:10px 0 4px;font:600 17px/1.3 "IBM Plex Sans Thai",system-ui,sans-serif;color:var(--ink)}
+.sc-body h3 small{font:400 13px var(--mono);color:var(--ink-3);margin-left:6px}
+.sc-body > p{margin:0 0 16px;color:var(--ink-3);font-size:13px;line-height:1.55}
+.sc-big{display:flex;align-items:baseline;gap:12px;margin:14px 0 18px;padding:16px 20px;border:1px solid var(--line);border-radius:16px}
+.sc-big b{font:700 44px/1 "IBM Plex Sans Thai",system-ui,sans-serif;color:var(--ink);letter-spacing:-.03em}
+.sc-big span{color:var(--ink-3);font-size:13px}
+.sc-btn,.sc-tile a.try{display:inline-block;font:500 13px var(--mono);color:#fff;background:var(--you);text-decoration:none;padding:9px 16px;border-radius:999px}
+.sc-btn:hover,.sc-tile a.try:hover{background:var(--pop)}
+.sc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.sc-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.sc-grid.tall{grid-template-columns:repeat(4,minmax(0,1fr))}
+.sc-tile{margin:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.sc-tile:hover{transform:translateY(-4px);box-shadow:0 14px 26px -12px rgba(40,30,20,.3)}
+.sc-tile img,.sc-tile .ph{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:top}
+.sc-grid.tall .sc-tile img{aspect-ratio:9/14}
+.sc-tile .ph{display:grid;place-items:center}
+.sc-tile .ph b{font:600 15px var(--mono);color:#14532d}
+.sc-tile figcaption{padding:9px 11px 11px;font-size:11.5px;line-height:1.4;color:var(--ink-3)}
+.sc-tile figcaption b{display:block;font:600 13px "IBM Plex Sans Thai",system-ui,sans-serif;color:var(--ink);margin-bottom:2px}
+.sc-tile figcaption span{display:flex;align-items:center;gap:6px;margin-top:8px}
+.sc-tile figcaption span a:not(.try){display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;color:var(--ink-3)}
+.sc-tile figcaption span a:not(.try):hover{background:var(--chip);color:var(--ink)}
+.sc-tile figcaption svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.sc-tile a.try{padding:6px 12px;font-size:12px}
+@media (max-width:620px){.sc-grid,.sc-grid.two,.sc-grid.tall{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sc-cover img{width:110px;height:150px;right:14px}.sc-body{padding:0 16px 18px}.sc-big b{font-size:36px}}
+/* pinned (wide screens with motion, set by the script) */
+.sc.pin{height:calc(100vh * (var(--n) + 1.4))}
+.sc.pin .sc-pin{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:minmax(200px,1fr) minmax(0,640px);grid-template-rows:auto auto;column-gap:48px;align-content:center}
+.sc.pin .sc-head{grid-column:1 / -1;text-align:center;opacity:calc(1 - var(--in,0))}
+.sc.pin .sc-list{display:block;list-style:none;margin:0;padding:0;align-self:center;opacity:var(--in,0);translate:calc((1 - var(--in,0)) * -40px) 0}
+.sc.pin .sc-list a{display:block;padding:8px 0;font:600 clamp(20px,2.4vw,30px)/1.2 "IBM Plex Sans Thai",system-ui,sans-serif;letter-spacing:-.02em;color:#c9c3bb;text-decoration:none;transition:color .35s,translate .35s}
+.sc.pin .sc-list a:hover{color:var(--ink-3)}
+.sc.pin .sc-list a[aria-current=true]{color:var(--ink);translate:8px 0}
+.sc.pin .sc-stage{display:grid;align-self:center;align-items:center;translate:calc((1 - var(--in,0)) * var(--sh,-160px)) 0}
+.sc.pin .sc-card{grid-area:1 / 1;opacity:0;translate:0 60px;scale:.94;rotate:2deg;pointer-events:none;transition:opacity .45s,translate .6s cubic-bezier(.2,.8,.2,1),scale .6s cubic-bezier(.2,.8,.2,1),rotate .6s cubic-bezier(.2,.8,.2,1)}
+.sc.pin .sc-card.past{translate:0 -60px;rotate:-2deg}
+.sc.pin .sc-card.on{opacity:1;translate:0 0;scale:1;rotate:0deg;pointer-events:auto}
+.sc.pin .sc-card.on .sc-tile,.sc.pin .sc-card.on .sc-big,.sc.pin .sc-card.on .sc-cover img{animation:sc-pop .6s cubic-bezier(.2,1.3,.4,1) backwards;animation-delay:calc(.12s + var(--k,0) * .07s)}
+@keyframes sc-pop{from{opacity:0;translate:0 24px;scale:.9}}
+.sc.pin .sc-card .sc-grid.tall .sc-tile img{aspect-ratio:9/13}
+@media (max-height:760px){.sc.pin .sc-cover{height:120px}.sc.pin .sc-grid.tall .sc-tile img{aspect-ratio:1/1}.sc.pin .sc-tile img,.sc.pin .sc-tile .ph{aspect-ratio:16/10}}
+
+/* certificates */
 .more-certs{font:500 13px var(--mono);border:1px solid var(--ink);border-radius:999px;padding:9px 18px;background:var(--paper);color:var(--ink);cursor:pointer}
 .more-certs:hover{background:var(--you);color:#fff}
 .cooking a.open{color:var(--pop);font-weight:500}
@@ -451,7 +507,7 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
     <p class="role">Content Creator · Vibe Coder</p>
     <p class="pos">verb &amp; noun</p>
     <p class="tag">ทำคอนเทนต์การเงิน/ภาษี และสร้างระบบหลังบ้านให้ร้านค้า</p>
-    <p class="go"><a class="main" href="#recent">ดูผลงาน ↓</a><a href="#work-with-me">ติดต่องาน ✉</a></p>
+    <p class="go"><a class="main" href="#work">ดูผลงาน ↓</a><a href="#work-with-me">ติดต่องาน ✉</a></p>
   </div>
 
   <div class="menu" role="toolbar" aria-label="จัดโต๊ะ">
@@ -467,7 +523,7 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
 <!-- ============ CONTENT ============ -->
 <nav class="jump" id="jump" aria-label="ไปที่ส่วนต่าง ๆ">
   <a class="me" href="#desk" aria-label="กลับขึ้นบนสุด">Zine</a>
-  <a href="#recent">ผลงาน</a><a class="wide" href="#others">งานอื่น</a><a href="#experience">ประสบการณ์</a><a href="#certificates">ใบรับรอง</a><a class="wide" href="#about">เกี่ยวกับ</a>
+  <a href="#work">ผลงาน</a><a href="#experience">ประสบการณ์</a><a href="#certificates">ใบรับรอง</a><a class="wide" href="#about">เกี่ยวกับ</a>
   <a class="hire" href="#work-with-me">ติดต่องาน ✉</a>
 </nav>
 <main>
@@ -478,51 +534,65 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
     <p>ใช้ทำคลิปจริงแล้ว <a class="open" href="demo/content-studio/" data-app="demo/content-studio/" data-title="Content Studio · เดโม (โปรเจกต์จริงของช่อง ดูอย่างเดียว)" data-note="ดูได้ทุกหน้าและทุกขั้น · ปุ่มบันทึก สั่ง AI และเรนเดอร์ปิดไว้ในเดโม">ลองเปิดดูแอปตัวจริง ↗</a> ✎</p>
   </section>
 
-  <section class="recent" id="recent">
-    <h2>Recently Made ▶</h2>
-    <div class="rows">
-      <a class="row" href="demo/content-studio/" data-app="demo/content-studio/" data-title="Content Studio · เดโม (โปรเจกต์จริงของช่อง ดูอย่างเดียว)" data-note="ดูได้ทุกหน้าและทุกขั้น · ปุ่มบันทึก สั่ง AI และเรนเดอร์ปิดไว้ในเดโม" data-fan="studio">
-        <span class="icon" style="background:#FFFAF5;border:1px solid var(--line)"><svg viewBox="0 0 40 40" width="38" aria-hidden="true"><rect x="5" y="9" width="30" height="22" rx="4" fill="#3E3E42"/><path d="M17 15v10l8-5Z" fill="#FFFAF5"/></svg></span>
-        <div><h3>Content Studio</h3><p>สตูดิโอทำคลิป 5 โมดูลที่เขียนเองด้วย vibe coding · <u>กดเพื่อเปิดดูแอปจริง</u></p></div></a>
-      <a class="row" href="https://chan-creator.pages.dev" target="_blank" rel="noopener" data-fan="chan">
-        <span class="icon" style="background:#2a1230"><svg viewBox="0 0 40 40" width="38" aria-hidden="true"><path d="M4 31h32v5H4Z" fill="#0e6e6b"/><path d="M12 31V16l3-6 3 6v15Zm10 0V16l3-6 3 6v15Z" fill="#f4e9d8"/><path d="M18 31v-8h4v8Z" fill="#f4e9d8"/><path d="M20 4l4 4-4 5-4-5Z" fill="#c2183f"/></svg></span>
-        <div><h3>จันท์ครีเอเตอร์</h3><p>เว็บจัดอันดับอินฟลูเอนเซอร์จันทบุรี 1,191 ช่อง · อัปเดตยอดอัตโนมัติด้วย AI · <u>กดเพื่อเปิดเว็บจริง</u></p></div></a>
-      <a class="row" href="https://www.tiktok.com/@zine_kkb" target="_blank" rel="noopener" data-fan="zine">
-        <span class="icon" style="background:#111"><span style="font:600 13px var(--mono);color:#fff">ZINE</span></span>
-        <div><h3>zinedine kubkrabee</h3><p>ช่องแบรนด์ส่วนตัว แชร์เรื่องภาษี ระบบร้านอาหาร และ AI</p></div></a>
-    </div>
-    <div class="fan" id="fan" aria-hidden="true">
-      <div class="shot"><div class="scr" style="background:#3E3E42"><b>ออฟฟิศ</b><div class="blk"></div><div class="blk s"></div><div class="blk"></div><div class="blk"></div></div></div>
-      <div class="shot"><div class="scr" style="background:#F76240"><b>บท + ตรวจข้อมูล</b><div class="blk s"></div><div class="blk"></div><div class="blk"></div></div></div>
-      <div class="shot"><div class="scr" style="background:#2F6FE4"><b>ตัดต่อ</b><div class="blk"></div><div class="blk"></div><div class="blk s"></div></div></div>
-    </div>
-  </section>
-
-  <section id="others">
-    <h2>Other Work ⁕</h2>
-    <div class="others">
-      <article class="work">
-        <div class="thumb"><img src="demo/chan-creator-thumb.jpg" alt="หน้าอันดับของเว็บจันท์ครีเอเตอร์บนมือถือ" width="240" height="277" style="width:100%;height:100%;object-fit:cover;object-position:top"></div>
-        <div><h3>จันท์ครีเอเตอร์ — อันดับอินฟลูเอนเซอร์จันทบุรี</h3><p class="meta">เว็บสาธารณะ · 1,191 ช่อง · ใช้งานจริง | 2026</p><hr>
-          <p>รวมครีเอเตอร์และเพจเมืองจันท์จาก TikTok, YouTube, Facebook, IG และ Lemon8 จัดอันดับตามยอดผู้ติดตาม แยกหมวดและอำเภอ ให้ AI (Gemini) เปิดหน้าจริงไปนับยอดทุก 3 วัน แล้วสคริปต์ตรวจก่อนลง ยอดที่กระโดดผิดปกติต้องให้คนตรวจ ล็อกอิน Google เพื่อเสนอช่องใหม่ได้ ทุกหน้ามีฉากแลนด์มาร์กเมืองจันท์ที่ดินสอวาดขึ้นมาตอนเปลี่ยนหน้า และมีมาสคอตกระต่ายพาเที่ยว</p>
-          <p class="meta">Vite · React · Cloudflare Pages + D1 · Gemini (agy) · ภาพวาดจาก GPT</p>
-          <a class="try" href="https://chan-creator.pages.dev" target="_blank" rel="noopener">เปิดเว็บจริง</a></div>
-      </article>
-      <article class="work">
-        <div class="thumb"><img src="demo/khlang-lek-thumb.jpg" alt="หน้าสต็อกของระบบคลังเหล็ก (ข้อมูลตัวอย่าง)" width="240" height="277" style="width:100%;height:100%;object-fit:cover;object-position:top"></div>
-        <div><h3>คลังเหล็ก — ระบบสต็อก ขาย และการเงินร้านค้าเหล็ก</h3><p class="meta">งานลูกค้า · ร้านค้าเหล็กในภาคตะวันออก · ใช้งานจริง | 2026</p><hr>
-          <p>เว็บแอปที่ร้านใช้ทุกวันบนมือถือ: สต็อกเป็นเส้น/แผ่น/กิโล วางแผนตัดเหล็กจากท่อนเหลือ ซื้อเข้าและคิดทุนเฉลี่ย ออกใบเสนอราคา ใบเสร็จ ใบส่งของขายเชื่อพร้อม QR พร้อมเพย์ ติดตามลูกหนี้ สรุปกำไรและแผนเงินสด ให้ AI อ่านบิลซื้อเข้า แยกสิทธิ์เจ้าของกับลูกน้องถึงระดับฐานข้อมูล</p>
-          <p class="meta">Vite · JavaScript · Firebase · Vercel · Claude API · มีเทสต์ทุกจุดที่แตะเงินและสต็อก</p>
-          <a class="try" href="demo/khlang-lek/" data-app="demo/khlang-lek/" data-title="คลังเหล็ก · เดโม (ร้านและข้อมูลตัวอย่าง)">ลองเล่นเดโม</a></div>
-      </article>
-      <article class="work">
-        <div class="thumb" style="background:linear-gradient(160deg,#FCE7C8,#F7D74A)"></div>
-        <div><h3>SmartERP &amp; Stock Jin App</h3><p class="meta">Restaurant Stock &amp; ERP | 2026</p><hr><p>ระบบจัดการสต็อก วัตถุดิบ และต้นทุนร้านข้าวมันไก่ ออกแบบจากหน้างานจริงที่จินข้าวมันไก่สไตล์สิงคโปร์</p><a class="try" href="demo/stock-jin/" data-app="demo/stock-jin/" data-title="Stock Jin · เดโม (ข้อมูลตัวอย่าง)">ลองเล่นเดโม</a><a href="https://github.com/Zinedinekkb/smarterp-app" target="_blank" rel="noopener" aria-label="เปิดโปรเจกต์ SmartERP บน GitHub"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></a></div>
-      </article>
-      <article class="work">
-        <div class="thumb" style="background:linear-gradient(160deg,#D9F2E4,#3BB273)"></div>
-        <div><h3>Intra Biz Ops</h3><p class="meta">SOP · POS · Business Workflow | 2026</p><hr><p>ระบบบริหารจัดการหลังบ้านสำหรับผู้ประกอบการ วางมาตรฐาน SOP และเชื่อม Workflow การทำงานในร้าน</p><a href="https://github.com/Zinedinekkb/intra-biz-ops" target="_blank" rel="noopener" aria-label="เปิดโปรเจกต์ Intra Biz Ops บน GitHub"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></a></div>
-      </article>
+  <section class="sc" id="work" aria-label="ผลงานแยกตามหมวด">
+    <div class="sc-pin">
+      <div class="sc-head"><h2>Zine ทำอะไรได้บ้าง</h2><p>เลื่อนลงเรื่อย ๆ ผลงานจะเปลี่ยนไปทีละหมวด</p></div>
+      <ol class="sc-list">
+        <li><a href="#sc-creator">Content Creator</a></li>
+        <li><a href="#sc-edit">ตัดต่อวิดีโอ + AI</a></li>
+        <li><a href="#sc-systems">ระบบหลังร้าน</a></li>
+        <li><a href="#sc-tools">เครื่องมือครีเอเตอร์</a></li>
+      </ol>
+      <div class="sc-stage">
+        <article class="sc-card" id="sc-creator">
+          <div class="sc-cover" style="--c1:#1d1a18;--c2:#F76240"><b>Content<br>Creator</b><img src="work/clip-ai-4.jpg" alt="" width="540" height="960"></div>
+          <div class="sc-body">
+            <span class="sc-ava" aria-hidden="true">Z</span>
+            <h3>zinedine kubkrabee <small>@zine_kkb</small></h3>
+            <div class="sc-big"><b data-count>70K+</b><span>ผู้ติดตามรวมทุกช่องทาง</span></div>
+            <a class="sc-btn" href="https://www.tiktok.com/@zine_kkb" target="_blank" rel="noopener">ดูช่อง TikTok ↗</a>
+          </div>
+        </article>
+        <article class="sc-card" id="sc-edit">
+          <div class="sc-cover" style="--c1:#2b1b12;--c2:#c9772f"><b>ตัดต่อวิดีโอ<br>+ AI</b><img src="work/clip-ai-12.jpg" alt="" width="540" height="960"></div>
+          <div class="sc-body">
+            <span class="sc-ava" aria-hidden="true">Z</span>
+            <h3>ตัดคลิปเองด้วยสตูดิโอที่เขียนเอง</h3>
+            <p>ซับไทยทีละคำ กราฟิกเคลื่อนไหว เสียงประกอบ และอนิเมชันจากเสียงพากย์</p>
+            <div class="sc-grid tall">
+              <figure class="sc-tile"><img src="work/clip-ai-12.jpg" alt="เฟรมจากคลิป: หัวข้อ Argon ขึ้นเป็นตัวหนังสือใหญ่เหนือหัว" loading="lazy" width="540" height="960"><figcaption>คลิปถ่ายจริง · หัวข้อ + กรอบโฟกัส</figcaption></figure>
+              <figure class="sc-tile"><img src="work/clip-ai-28.jpg" alt="เฟรมจากคลิป: คำว่า ฟ้อนต์ เด้งขึ้นพร้อมท่าทาง" loading="lazy" width="540" height="960"><figcaption>คลิปถ่ายจริง · ซับทีละคำ</figcaption></figure>
+              <figure class="sc-tile"><img src="work/anim-12.jpg" alt="เฟรมจากอนิเมชัน: ตัวการ์ตูนหมวกเหลืองตกใจ หัวข้อ ห้ามทำกับ Claude" loading="lazy" width="540" height="960"><figcaption>อนิเมชันจากเสียงพากย์</figcaption></figure>
+              <figure class="sc-tile"><img src="work/anim-52.jpg" alt="เฟรมจากอนิเมชัน: ตัวการ์ตูนเงยหน้า ป้าย ก็อป error" loading="lazy" width="540" height="960"><figcaption>อนิเมชัน · มีมวาดใหม่</figcaption></figure>
+            </div>
+          </div>
+        </article>
+        <article class="sc-card" id="sc-systems">
+          <div class="sc-cover" style="--c1:#122a3d;--c2:#2F6FE4"><b>ระบบหลังร้าน<br><small>Vibe Coding</small></b><img src="demo/khlang-lek-thumb.jpg" alt="" width="240" height="277"></div>
+          <div class="sc-body">
+            <span class="sc-ava" aria-hidden="true">Z</span>
+            <h3>ระบบที่ร้านใช้งานจริง</h3>
+            <p>สต็อก ขาย การเงิน และงานหลังบ้าน ออกแบบจากหน้างานจริง</p>
+            <div class="sc-grid">
+              <figure class="sc-tile"><img src="demo/khlang-lek-thumb.jpg" alt="หน้าสต็อกของระบบคลังเหล็ก (ข้อมูลตัวอย่าง)" loading="lazy" width="240" height="277"><figcaption><b>คลังเหล็ก</b>งานลูกค้า · ร้านค้าเหล็ก · ใช้งานจริง<span><a class="try" href="demo/khlang-lek/" data-app="demo/khlang-lek/" data-title="คลังเหล็ก · เดโม (ร้านและข้อมูลตัวอย่าง)">ลองเล่นเดโม</a></span></figcaption></figure>
+              <figure class="sc-tile"><img src="work/stock-jin.jpg" alt="หน้าแดชบอร์ดของ Stock Jin (ข้อมูลตัวอย่าง)" loading="lazy" width="800" height="609"><figcaption><b>SmartERP &amp; Stock Jin</b>สต็อก วัตถุดิบ ต้นทุน ร้านข้าวมันไก่<span><a class="try" href="demo/stock-jin/" data-app="demo/stock-jin/" data-title="Stock Jin · เดโม (ข้อมูลตัวอย่าง)">ลองเล่นเดโม</a><a href="https://github.com/Zinedinekkb/smarterp-app" target="_blank" rel="noopener" aria-label="เปิดโปรเจกต์ SmartERP บน GitHub"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></a></span></figcaption></figure>
+              <figure class="sc-tile"><div class="ph" style="background:linear-gradient(160deg,#D9F2E4,#3BB273)"><b>SOP · POS</b></div><figcaption><b>Intra Biz Ops</b>มาตรฐาน SOP และ Workflow ในร้าน<span><a href="https://github.com/Zinedinekkb/intra-biz-ops" target="_blank" rel="noopener" aria-label="เปิดโปรเจกต์ Intra Biz Ops บน GitHub"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></a></span></figcaption></figure>
+            </div>
+          </div>
+        </article>
+        <article class="sc-card" id="sc-tools">
+          <div class="sc-cover" style="--c1:#2a1230;--c2:#c2183f"><b>เครื่องมือ<br>ครีเอเตอร์</b><img src="demo/chan-creator-thumb.jpg" alt="" width="240" height="277"></div>
+          <div class="sc-body">
+            <span class="sc-ava" aria-hidden="true">Z</span>
+            <h3>เครื่องมือที่ทำให้ครีเอเตอร์ทำงานง่ายขึ้น</h3>
+            <p>เขียนเองด้วย vibe coding และใช้งานจริงทุกวัน</p>
+            <div class="sc-grid two">
+              <figure class="sc-tile"><img src="work/studio.jpg" alt="หน้าออฟฟิศของ Content Studio" loading="lazy" width="800" height="609"><figcaption><b>Content Studio</b>สตูดิโอทำคลิป: ไอเดีย บท ตรวจข้อมูล ตัดต่อ<span><a class="try" href="demo/content-studio/" data-app="demo/content-studio/" data-title="Content Studio · เดโม (โปรเจกต์จริงของช่อง ดูอย่างเดียว)" data-note="ดูได้ทุกหน้าและทุกขั้น · ปุ่มบันทึก สั่ง AI และเรนเดอร์ปิดไว้ในเดโม">เปิดแอปจริง</a></span></figcaption></figure>
+              <figure class="sc-tile"><img src="demo/chan-creator-thumb.jpg" alt="หน้าอันดับของเว็บจันท์ครีเอเตอร์บนมือถือ" loading="lazy" width="240" height="277"><figcaption><b>จันท์ครีเอเตอร์</b>อันดับอินฟลูเอนเซอร์จันทบุรี 1,191 ช่อง<span><a class="try" href="https://chan-creator.pages.dev" target="_blank" rel="noopener">เปิดเว็บจริง</a></span></figcaption></figure>
+            </div>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -570,7 +640,7 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
   </section>
 
   <!-- certificates: images rendered from the creator's PDFs in D:\Cerlificate (certs/<id>.jpg full, <id>-s.jpg thumbnail) -->
-  <section class="certs short" id="certificates">
+  <section class="certs" id="certificates">
     <h2>Certificates ✧</h2>
     <p class="cert-lead">ใบรับรองทั้งหมด 41 ใบ กดที่ใบไหนก็ได้เพื่อดูเต็ม ๆ</p>
 
@@ -704,7 +774,6 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
       </div>
     </div>
 
-    <p><button type="button" class="more-certs" id="moreCerts">ดูใบรับรองทั้งหมด 41 ใบ ▾</button></p>
     <dialog class="viewer" id="viewer" aria-label="ดูใบรับรอง">
       <img id="viewerImg" alt="">
       <form method="dialog"><button type="submit">ปิด ✕</button></form>
@@ -957,7 +1026,7 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
 
   // Recently made: your own named cursor + screens fanning out on hover.
   const you = document.getElementById('you'), fan = document.getElementById('fan');
-  const fanShots = [...fan.querySelectorAll('.scr')];
+  const fanShots = fan ? [...fan.querySelectorAll('.scr')] : [];
   const fanData = {
     studio: [['#3E3E42','คิดไอเดีย + ตารางโพสต์'],['#F76240','บท + ตรวจข้อมูลภาษี'],['#2F6FE4','ตัดต่อ + ซับไทย']],
     chan:   [['#c2183f','ใครเป็นที่เท่าไหร่ในจันท์'],['#0e6e6b','ฉากแลนด์มาร์ก + ดินสอวาด'],['#5a2f66','ล็อกอิน Google + เพิ่มช่องเอง']],
@@ -1052,6 +1121,35 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
     if (en.target.classList.contains('stat')) countUp(en.target.querySelector('b')); }), { rootMargin: '0px 0px -12% 0px' });
   main.querySelectorAll('h2.scrib, .drop').forEach(el => seen.observe(el));
 
+  // Work by category: on wide screens (with motion) the section pins to the window. First the card slides right while the
+  // list of categories comes in on the left; after that every bit of scrolling swaps the card to the next category.
+  // Elsewhere the cards are simply stacked and drop in. The list scrolls to a category when clicked.
+  (() => {
+    const sec = document.getElementById('work'), cards = [...sec.querySelectorAll('.sc-card')], items = [...sec.querySelectorAll('.sc-list a')];
+    const n = cards.length, INTRO = .14, wide = matchMedia('(min-width:900px)');
+    cards.forEach(c => c.querySelectorAll('.sc-tile, .sc-big, .sc-cover img').forEach((el, k) => el.style.setProperty('--k', k)));
+    const counted = new Set();
+    let cur = -1, busy = false, pinned = false;
+    const show = i => { if (i === cur) return; cur = i;
+      cards.forEach((c, k) => { c.classList.toggle('on', k === i); c.classList.toggle('past', k < i); c.inert = k !== i; });
+      items.forEach((a, k) => a.setAttribute('aria-current', k === i));
+      const big = cards[i].querySelector('[data-count]'); if (big && !counted.has(big)) { counted.add(big); countUp(big); } };
+    const frame = () => { busy = false; if (!pinned) return;
+      const r = sec.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
+      sec.style.setProperty('--in', Math.min(1, p / INTRO).toFixed(3));
+      sec.style.setProperty('--sh', -(sec.querySelector('.sc-list').offsetWidth + 48) / 2 + 'px');
+      show(Math.min(n - 1, Math.floor(Math.max(0, p - INTRO) / (1 - INTRO) * n))); };
+    const ask = () => { if (!busy) { busy = true; requestAnimationFrame(frame); } };
+    const mode = () => { pinned = wide.matches && !still; sec.classList.toggle('pin', pinned);
+      if (pinned) { cur = -1; frame(); }
+      else { sec.style.removeProperty('--in'); cards.forEach(c => { c.classList.remove('on', 'past'); c.inert = false;
+        if (!c.classList.contains('drop')) { c.classList.add('drop'); seen.observe(c); } }); } };
+    items.forEach((a, k) => a.addEventListener('click', e => { if (!pinned) return; e.preventDefault();
+      const top = sec.getBoundingClientRect().top + scrollY, span = sec.offsetHeight - innerHeight;
+      scrollTo({ top: top + span * (INTRO + (k + .5) / n * (1 - INTRO)), behavior: 'smooth' }); }));
+    addEventListener('scroll', ask, { passive: true }); addEventListener('resize', ask); wide.addEventListener('change', mode); mode();
+  })();
+
   // Certificates: boom. When a group comes into view, all its certificates start as one pile in the middle, blow out
   // past their places spinning, then flutter down and land; loose paper scraps fly off and fall away. Once per group.
   if (!still && Element.prototype.animate) {
@@ -1115,11 +1213,6 @@ main section :where(a,button,input,code,p,h2,h3,li,footer,dialog,.row,.work,.cer
     links.forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + en.target.id)); }), { rootMargin: '-45% 0px -50% 0px' });
   links.forEach(a => { const sec = document.querySelector(a.getAttribute('href')); if (sec) onScreen.observe(sec); });
 
-  // Certificates start with the first two groups; the button (or any link into the list) opens the rest.
-  const certs = document.getElementById('certificates'), more = document.getElementById('moreCerts');
-  const openCerts = () => { certs.classList.remove('short'); more.parentElement.remove(); };
-  more.addEventListener('click', openCerts);
-  if (location.hash === '#certificates') openCerts();
 
   // Background shade: a few soft warm clouds drifting slowly behind everything. Drawn small and stretched (it is blurry
   // anyway), about 30 frames a second, stopped while the tab is hidden; one still frame with reduced motion.
